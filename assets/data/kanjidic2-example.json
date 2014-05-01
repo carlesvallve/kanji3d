@@ -1,0 +1,195 @@
+{
+    "codepoints": [
+        {
+            "cp_type": "ucs",
+            "cp_value": "4e9c"
+        },
+        {
+            "cp_type": "jis208",
+            "cp_value": "16-01"
+        }
+    ],
+    "dic_numbers": [
+        {
+            "dic_ref": "43",
+            "dr_type": "nelson_c"
+        },
+        {
+            "dic_ref": "81",
+            "dr_type": "nelson_n"
+        },
+        {
+            "dic_ref": "3540",
+            "dr_type": "halpern_njecd"
+        },
+        {
+            "dic_ref": "2204",
+            "dr_type": "halpern_kkld"
+        },
+        {
+            "dic_ref": "1809",
+            "dr_type": "heisig"
+        },
+        {
+            "dic_ref": "1331",
+            "dr_type": "gakken"
+        },
+        {
+            "dic_ref": "525",
+            "dr_type": "oneill_names"
+        },
+        {
+            "dic_ref": "1788",
+            "dr_type": "oneill_kk"
+        },
+        {
+            "dic_ref": "272",
+            "dr_type": "moro"
+        },
+        {
+            "dic_ref": "997",
+            "dr_type": "henshall"
+        },
+        {
+            "dic_ref": "1616",
+            "dr_type": "sh_kk"
+        },
+        {
+            "dic_ref": "1032",
+            "dr_type": "jf_cards"
+        },
+        {
+            "dic_ref": "1092",
+            "dr_type": "tutt_cards"
+        },
+        {
+            "dic_ref": "1818",
+            "dr_type": "kanji_in_context"
+        },
+        {
+            "dic_ref": "35",
+            "dr_type": "kodansha_compact"
+        },
+        {
+            "dic_ref": "1827",
+            "dr_type": "maniette"
+        }
+    ],
+    "freq": 1509,
+    "grade": 8,
+    "jlpt": 1,
+    "literal": "亜",
+    "meanings": [
+        {
+            "meaning": "Asia"
+        },
+        {
+            "meaning": "rank next"
+        },
+        {
+            "meaning": "come after"
+        },
+        {
+            "meaning": "-ous"
+        },
+        {
+            "m_lang": "fr",
+            "meaning": "Asie"
+        },
+        {
+            "m_lang": "fr",
+            "meaning": "suivant"
+        },
+        {
+            "m_lang": "fr",
+            "meaning": "sub-"
+        },
+        {
+            "m_lang": "fr",
+            "meaning": "sous-"
+        },
+        {
+            "m_lang": "es",
+            "meaning": "pref. para indicar"
+        },
+        {
+            "m_lang": "es",
+            "meaning": "venir después de"
+        },
+        {
+            "m_lang": "es",
+            "meaning": "Asia"
+        },
+        {
+            "m_lang": "pt",
+            "meaning": "Ásia"
+        },
+        {
+            "m_lang": "pt",
+            "meaning": "próxima"
+        },
+        {
+            "m_lang": "pt",
+            "meaning": "o que vem depois"
+        },
+        {
+            "m_lang": "pt",
+            "meaning": "-ous"
+        }
+    ],
+    "query_codes": [
+        {
+            "q_code": "4-7-1",
+            "qc_type": "skip"
+        },
+        {
+            "q_code": "0a7.14",
+            "qc_type": "sh_desc"
+        },
+        {
+            "q_code": "1010.6",
+            "qc_type": "four_corner"
+        },
+        {
+            "q_code": "3273",
+            "qc_type": "deroo"
+        }
+    ],
+    "radicals": [
+        {
+            "rad_type": "classical",
+            "rad_value": 7
+        },
+        {
+            "rad_type": "nelson_c",
+            "rad_value": 1
+        }
+    ],
+    "readings": [
+        {
+            "r_type": "pinyin",
+            "reading": "ya4"
+        },
+        {
+            "r_type": "korean_r",
+            "reading": "a"
+        },
+        {
+            "r_type": "korean_h",
+            "reading": "아"
+        },
+        {
+            "r_type": "ja_on",
+            "reading": "ア"
+        },
+        {
+            "r_type": "ja_kun",
+            "reading": "つ.ぐ"
+        }
+    ],
+    "stroke_count": 7,
+    "variant": {
+        "var_type": "jis208",
+        "variant": "48-19"
+    }
+}
