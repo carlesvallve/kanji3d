@@ -6,17 +6,14 @@ var touchmove = canTouch ? 'touchmove' : 'mousemove';
 var touchend = canTouch ? 'touchend' : 'mouseup';
 var touchcancel = canTouch ? 'touchcancel' : false;
 
-// TODO: we need to get positions relative to the element, not relative to the page...
 
+function swipedetect(touchsurface, callback) {
 
-function swipedetect(el, callback) {
-
-	console.log(callback);
-
-	var touchsurface = el,
-		swipedir,
+		var swipedir,
 		startX,
 		startY,
+        endX,
+        endY,
 		distX,
 		distY,
 		threshold = 20, //required min distance traveled to be considered swipe
@@ -34,8 +31,8 @@ function swipedetect(el, callback) {
 
 		swipedir = 'none';
 		dist = 0;
-		startX = touchobj.pageX;
-		startY = touchobj.pageY;
+		startX = touchobj.pageX - touchsurface.offsetLeft;
+		startY = touchobj.pageY - touchsurface.offsetTop;
 		startTime = new Date().getTime(); // record time when finger first makes contact with surface
 		e.preventDefault();
 
@@ -54,8 +51,10 @@ function swipedetect(el, callback) {
 	touchsurface.addEventListener(touchend, function(e) {
 		var touchobj = canTouch ? e.changedTouches[0] : e;
 
-		distX = touchobj.pageX - startX; // get horizontal dist traveled by finger while in contact with surface
-		distY = touchobj.pageY - startY; // get vertical dist traveled by finger while in contact with surface
+        endX = touchobj.pageX - touchsurface.offsetLeft;
+        endY = touchobj.pageY - touchsurface.offsetTop;
+		distX = endX - startX; // get horizontal dist traveled by finger while in contact with surface
+		distY = endY - startY; // get vertical dist traveled by finger while in contact with surface
 
 		elapsedTime = new Date().getTime() - startTime; // get time elapsed
 

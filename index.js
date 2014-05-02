@@ -6,11 +6,17 @@ var kanjidic = new Kanjidic('./assets/data/kanjidic2.json.zip');
 kanjidic.load('./assets/data/kanjidic2.json', function () {
     console.log(kanjidic);
 
-	tileboard = new Tileboard(9, 9);
+    var container = domutils.appendChild('div', document.body, 'app');
 
-	// search all kanjis in a given category
+	tileboard = new Tileboard(container, 6, 6);
+    tileboard.createTiles();
+
+	// initialize tileboard at chapter 1 of jlpt 4
 	var category = kanjidic.filterByCategory(4, 'jlpt', 'freq');
 	tileboard.initChapter(category, 1);
+
+
+    // =========================================================
 	//console.log('jlpt4', category.length, 'kanjis:', category);
 
     // search for a single kanji  entry
@@ -28,7 +34,7 @@ kanjidic.load('./assets/data/kanjidic2.json', function () {
         domutils.appendChild('span', document.body, 'kanji', entry.literal);
         kanjis.push(entry);
     }*/
-
+    // =========================================================
 
 });
 

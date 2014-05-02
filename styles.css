@@ -4,49 +4,73 @@ html {}
 body {
     margin: 0;
     padding: 10px 10px;
-    background-color: #eee; //#474747; /*#222;*/
-    color: #eee;
+    background-color: #eee; /*#474747; #222;*/
+    color: #000;
 }
 
+.app {
+    width: 320px;
+    height: 480px;
+    background-color: #000;
+
+}
 
 .tileboard {
-    /*padding:2px 2px;*/
     position: relative;
     border-radius: 14px;
+    left: 4px;
+    top: 164px;
 
-    background-color: #f7f7f7;
-    /*background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#e7e7e7));
-    background-image: -webkit-linear-gradient(top, #f7f7f7, #e7e7e7);
-    background-image: -moz-linear-gradient(top, #f7f7f7, #e7e7e7);
-    background-image: -ms-linear-gradient(top, #f7f7f7, #e7e7e7);
-    background-image: -o-linear-gradient(top, #f7f7f7, #e7e7e7);*/
-
-    box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
+    /*background-color: #f7f7f7;
+    box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;*/
 }
 
 .tile {
     position: absolute;
-    background-color: #474747;
-    border-radius: 10px;
+    /*background-color: #474747;
+    border-radius: 10px;*/
 
     /*border: solid #ccc 3px;*/
     /*box-shadow: 0 1px 2px #fff, 0 -1px 1px #666, inset 0 -1px 1px rgba(0,0,0,0.0), inset 0 1px 1px rgba(255,255,255,0.0);*/
 }
 
+.block {
+    position: relative;
+    background-color: #474747;
+    border-radius: 10px;
+    left: 50%; top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+}
+
 .kanji {
+    position: relative;
     font-family: Impact, Courier, Verdana;
     text-align: center;
     font-weight: bold;
-    font-size: 32px;
+    font-size: 28px;
+    line-height: 1.5;
     color: #fff;
-    opacity: 0.6;
+    opacity: 0.7;
 
-    text-shadow: 0px 2px 2px #000;
+    text-shadow: 0px 1px 2px #000;
 
 
 
     /*text-shadow: 0 0 1px #fff,
         0 0 2px #ff00de, 0 0 3px #ff00de,
         0 0 6px #ff00de, 0 0 10px #ff00de, 0 0 16px #ff00de;*/
+}
+
+.info {
+    position: absolute;
+    left: 4px; top: 4px;
+    font-family: Verdana;
+    text-align: center;
+    font-weight: normal;
+    font-size: 8px;
+    color: #fff;
+    opacity: 1;
+
+    text-shadow: 0px 1px 1px #000;
 }
 
