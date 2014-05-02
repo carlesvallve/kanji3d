@@ -91,12 +91,13 @@ var Tileboard = function (width, height) {
 
 
 	this.getTileAtPos = function (pos) {
-		var x = ~~((pos.x - 8) / (this.tileSize + this.margin)); // - this.margin - 8;
-		var y = ~~((pos.y - 8) / (this.tileSize + this.margin)); // - this.margin - 8;
+		var posX = 10, posY = 10;
+		var x = ~~((-posX + pos.x - this.margin * 0.5) / (this.tileSize + this.margin));
+		var y = ~~((-posY + pos.y - this.margin * 0.5) / (this.tileSize + this.margin));
 		var tile = this.tiles[y][x];
 		console.log(x, y, tile);
 		if (tile) {
-			tile.style.opacity = 0.5;
+			tile.elm.style.opacity = 0.5;
 		}
 	};
 

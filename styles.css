@@ -3,14 +3,14 @@ html {}
 
 body {
     margin: 0;
-    padding: 8px 8px;
+    padding: 10px 10px;
     background-color: #eee; //#474747; /*#222;*/
     color: #eee;
 }
 
 
 .tileboard {
-    padding:2px 2px;
+    /*padding:2px 2px;*/
     position: relative;
     border-radius: 14px;
 
