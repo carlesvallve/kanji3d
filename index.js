@@ -14,7 +14,7 @@ kanjidic.load('./assets/data/kanjidic2.json', function () {
 
     // display random kanjis from category
     var kanjis = [];
-    for (var i = 1; i <= results.length; i++) {
+    for (var i = 0; i < results.length; i++) {
         var entry = results[i]; //results[~~(Math.random() * results.length - 1)];
         domutils.appendChild('span', document.body, 'kanji', entry.literal);
         kanjis.push(entry);
