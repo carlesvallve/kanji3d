@@ -1,20 +1,48 @@
 html {}
 
+
 body {
     margin: 0;
-    padding: 2px 4px;
-    background-color: #474747; /*#222;*/
+    padding: 8px 8px;
+    background-color: #eee; //#474747; /*#222;*/
     color: #eee;
+}
+
+
+.tileboard {
+    padding:2px 2px;
+    position: relative;
+    border-radius: 14px;
+
+    background-color: #f7f7f7;
+    /*background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#e7e7e7));
+    background-image: -webkit-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -moz-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -ms-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -o-linear-gradient(top, #f7f7f7, #e7e7e7);*/
+
+    box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
+}
+
+.tile {
+    position: absolute;
+    background-color: #474747;
+    border-radius: 10px;
+
+    /*border: solid #ccc 3px;*/
+    box-shadow: 0 1px 2px #fff, 0 -1px 1px #666, inset 0 -1px 1px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.8);
 }
 
 .kanji {
     font-family: Impact, Courier, Verdana;
+    text-align: center;
     font-weight: bold;
-    font-size: 44px;
-    padding: 4px;
+    font-size: 32px;
     color: #222;
 
     text-shadow: 0px 2px 3px #666;
+
+
 
     /*text-shadow: 0 0 1px #fff,
         0 0 2px #ff00de, 0 0 3px #ff00de,

@@ -7,6 +7,10 @@ var DomUtils = function () {
 
         return elm;
     };
+
+	this.setText = function (elm, text) {
+		elm.innerText = text;
+	}
 };
 
 var domutils = new DomUtils();
