@@ -1,7 +1,7 @@
 // non-touch enabled browser workarounds and fixes for unsupported dom events
 var canTouch = ('ontouchstart' in window && 'ontouchend' in window && 'ontouchmove' in window);
 
-var touchstart = canTouch ? 'touchsart' : 'mousedown';
+var touchstart = canTouch ? 'touchstart' : 'mousedown';
 var touchmove = canTouch ? 'touchmove' : 'mousemove';
 var touchend = canTouch ? 'touchend' : 'mouseup';
 var touchcancel = canTouch ? 'touchcancel' : false;
@@ -16,7 +16,7 @@ function swipedetect(touchsurface, callback) {
         endY,
 		distX,
 		distY,
-		threshold = 20, //required min distance traveled to be considered swipe
+		threshold = 5, //required min distance traveled to be considered swipe
 		restraint = 200, // maximum distance allowed at the same time in perpendicular direction
 		allowedTime = 1000, // maximum time allowed to travel that distance
 		elapsedTime,
@@ -28,6 +28,8 @@ function swipedetect(touchsurface, callback) {
 
 	touchsurface.addEventListener(touchstart, function(e) {
 		var touchobj = canTouch ? e.changedTouches[0] : e;
+
+        //alert('touch start!');
 
 		swipedir = null; //'none';
 		startX = touchobj.pageX - touchsurface.offsetLeft;
@@ -41,14 +43,11 @@ function swipedetect(touchsurface, callback) {
 	// touch move
 
 	touchsurface.addEventListener(touchmove, function(e) {
-		e.preventDefault(); // prevent scrolling when inside DIV
-	}, false);
+        if (swipedir) { return; }
 
-
-	// touch end
-
-	touchsurface.addEventListener(touchend, function(e) {
 		var touchobj = canTouch ? e.changedTouches[0] : e;
+
+        //alert('touch end!');
 
         endX = touchobj.pageX - touchsurface.offsetLeft;
         endY = touchobj.pageY - touchsurface.offsetTop;
@@ -68,7 +67,14 @@ function swipedetect(touchsurface, callback) {
 
 		handleSwipe({ x: startX, y: startY }, swipedir);
 		e.preventDefault();
-	}, false)
+	}, false);
+
+
+    // touch end
+
+    touchsurface.addEventListener(touchend, function(e) {
+        e.preventDefault(); // prevent scrolling when inside DIV
+    }, false);
 }
 
 //USAGE:

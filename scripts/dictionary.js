@@ -18,7 +18,7 @@ var Kanjidic = function () {
 
         var xobj = new XMLHttpRequest();
         xobj.overrideMimeType("application/json");
-        xobj.open('GET', filename + '?' + new Date().getTime(), true);
+        xobj.open('GET', filename, true); // + '?' + new Date().getTime(), true);
 
         xobj.onreadystatechange = function () {
             if (xobj.readyState === 4 && xobj.status === 200) {

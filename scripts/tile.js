@@ -9,7 +9,7 @@ var Tile = function (tileboard, x, y) {
     this.elm = domutils.appendChild('div', tileboard.elm, 'tile');
     this.elm.block = domutils.appendChild('div', this.elm, 'block');
     this.elm.kanji = domutils.appendChild('div', this.elm.block, 'kanji');
-    this.elm.info = domutils.appendChild('div', this.elm.block, 'info', this.x + ',' + this.y);
+    //this.elm.info = domutils.appendChild('div', this.elm.block, 'info', this.x + ',' + this.y);
 
     // size
     this.elm.style.width = tileboard.tileSize + 'px';
@@ -34,10 +34,13 @@ var Tile = function (tileboard, x, y) {
         this.elm.style.webkitTransform = 'translate(' + this.pos.x + 'px, ' + this.pos.y + 'px)';
 
         // colorize
-        this.elm.block.style.backgroundColor = this.colors[0];
-        this.elm.block.style.boxShadow =
+        //this.elm.block.style.backgroundColor = this.colors[0];
+        //this.elm.kanji.style.color = this.colors[0];
+        /*this.elm.kanji.style.textShadow =
             '0 1px 2px ' + colors[1] + ', 0 -1px 1px ' + colors[0] + ', inset 0 -1px 1px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.5)';
-
+*/
+        this.elm.kanji.style.textShadow = '0 0 1px #000, 0 0 2px #000, 0 0 3px #000, ' +
+            '0 0 4px ' + colors[0] + ', 0 0 7px ' + colors[0] + ', 0 0 8px ' + colors[0] + ', 0 0 10px ' + colors[0] + ', 0 0 15px ' + colors[0];
         // fill with data
         domutils.setText(this.elm.kanji, this.data.literal);
     };
@@ -51,9 +54,9 @@ var Tile = function (tileboard, x, y) {
         // move tile to new pos
         tweener.tween(this.elm,
             { 'webkitTransform': 'translate(' + pos.x + 'px, ' + pos.y + 'px)' },
-            { time: 250, delay: 0, easing: 'ease-in-out' },
+            { time: 150, delay: 0, easing: 'ease' },
             function () {
-                domutils.setText(self.elm.info, self.x + ',' + self.y);
+               // domutils.setText(self.elm.info, self.x + ',' + self.y);
             }
         );
     };

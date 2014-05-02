@@ -2,7 +2,7 @@ var Tileboard = function (container, width, height) {
 	// set vars
 	var self = this;
 
-	this.tileSize = 52;
+	this.tileSize = 44;
 	this.width = width;
 	this.height = height;
     this.x = 10;
@@ -35,18 +35,24 @@ var Tileboard = function (container, width, height) {
 		// set chapter vars
 		this.chapter = {
 			kanjis:[],
-			colors: [['#f00', '#900'], ['#390', '#330'], ['#099', '#033'], ['#f90', '#930']]
+			//colors: [['#ccc', '#900'], ['#999', '#330'], ['#666', '#033'], ['#333', '#930']]
+            colors: [['#f00', '#900'], ['#ff0', '#330'], ['#0ff', '#033'], ['#f90', '#930']]
 		};
 
 		// get kanjis on current chapter num
-		for (var i = chapterNum - 1; i < chapterNum + 3; i++) {
+        var max = 4;
+        var start = max * (chapterNum - 1);
+        var end = start + max;
+		for (var i = start; i < end; i++) {
 			this.chapter.kanjis.push(category[i]);
 		}
+
+        console.log('chapter', chapterNum +':', this.chapter.kanjis);
 
 		// initialize current chapter tiles
 		for (var y = 0; y < this.height; y++) {
 			for (var x = 0; x < this.width; x++) {
-				var num = utils.randomInt(0, 3);
+				var num = utils.randomInt(0, max - 1);
 				this.tiles[y][x].init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
 			}
 		}
