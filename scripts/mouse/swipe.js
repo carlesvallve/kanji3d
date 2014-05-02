@@ -29,8 +29,7 @@ function swipedetect(touchsurface, callback) {
 	touchsurface.addEventListener(touchstart, function(e) {
 		var touchobj = canTouch ? e.changedTouches[0] : e;
 
-		swipedir = 'none';
-		dist = 0;
+		swipedir = null; //'none';
 		startX = touchobj.pageX - touchsurface.offsetLeft;
 		startY = touchobj.pageY - touchsurface.offsetTop;
 		startTime = new Date().getTime(); // record time when finger first makes contact with surface
@@ -68,7 +67,7 @@ function swipedetect(touchsurface, callback) {
 		}
 
 		handleSwipe({ x: startX, y: startY }, swipedir);
-		e.preventDefault()
+		e.preventDefault();
 	}, false)
 }
 
