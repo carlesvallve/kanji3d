@@ -32,7 +32,7 @@ var Tile = function (tileboard, x, y) {
 		// colorize
 		this.elm.style.backgroundColor = this.colors[0];
 		this.elm.style.boxShadow =
-			'0 1px 2px ' + colors[1] + ', 0 -1px 1px ' + colors[0] + ', inset 0 -1px 1px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.8)';
+			'0 1px 2px ' + colors[1] + ', 0 -1px 1px ' + colors[0] + ', inset 0 -1px 1px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.5)';
 
 		// fill with data
 		domutils.setText(this.elm.kanji, this.data.literal);
@@ -42,18 +42,21 @@ var Tile = function (tileboard, x, y) {
 
 var Tileboard = function (width, height) {
 	// set vars
+	var self = this;
 	this.tileSize = 48;
 	this.margin = 5;
 	this.width = width;
 	this.height = height;
 
 	// create tileboard elements
+
 	this.elm = domutils.appendChild('div', document.body, 'tileboard');
 	this.elm.style.width = (this.margin + width * (this.tileSize + this.margin)) + 'px';
 	this.elm.style.height = (this.margin + height * (this.tileSize + this.margin)) + 'px';
 
 
 	// create tiles
+
 	this.tiles = [];
 	for (var y = 0; y < height; y++) {
 		this.tiles.push([]);
@@ -62,17 +65,14 @@ var Tileboard = function (width, height) {
 		}
 	}
 
-	// swipe detector
-	swipedetect(this.elm, function(swipedir) {
-		console.log('swipe', swipedir);
-	});
 
+	// initialize chapter
 
 	this.initChapter = function (category, chapterNum) {
 		// set chapter vars
 		this.chapter = {
 			kanjis:[],
-			colors: [['#f00', '#900'], ['#0f0', '#090'], ['#0ff', '#099'], ['#f90', '#930']]
+			colors: [['#f00', '#900'], ['#390', '#330'], ['#099', '#033'], ['#f90', '#930']]
 		};
 
 		// get kanjis on current chapter num
@@ -87,7 +87,28 @@ var Tileboard = function (width, height) {
 				this.tiles[y][x].init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
 			}
 		}
-	}
+	};
+
+
+	this.getTileAtPos = function (pos) {
+		var x = ~~((pos.x - 8) / (this.tileSize + this.margin)); // - this.margin - 8;
+		var y = ~~((pos.y - 8) / (this.tileSize + this.margin)); // - this.margin - 8;
+		var tile = this.tiles[y][x];
+		console.log(x, y, tile);
+		if (tile) {
+			tile.style.opacity = 0.5;
+		}
+	};
+
+
+	// swipe tiles
+
+	this.swipeTiles = function (pos, dir) {
+		console.log('swipe', pos, dir);
+		self.getTileAtPos(pos);
+	};
+
+	swipedetect(this.elm, this.swipeTiles);
 };
 
 

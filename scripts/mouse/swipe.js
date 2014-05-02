@@ -6,8 +6,12 @@ var touchmove = canTouch ? 'touchmove' : 'mousemove';
 var touchend = canTouch ? 'touchend' : 'mouseup';
 var touchcancel = canTouch ? 'touchcancel' : false;
 
+// TODO: we need to get positions relative to the element, not relative to the page...
+
 
 function swipedetect(el, callback) {
+
+	console.log(callback);
 
 	var touchsurface = el,
 		swipedir,
@@ -16,11 +20,11 @@ function swipedetect(el, callback) {
 		distX,
 		distY,
 		threshold = 20, //required min distance traveled to be considered swipe
-		restraint = 100, // maximum distance allowed at the same time in perpendicular direction
-		allowedTime = 300, // maximum time allowed to travel that distance
+		restraint = 200, // maximum distance allowed at the same time in perpendicular direction
+		allowedTime = 1000, // maximum time allowed to travel that distance
 		elapsedTime,
 		startTime,
-		handleswipe = callback || function(swipedir) {};
+		handleSwipe = callback || function(point, swipedir) {};
 
 
 	// touch start
@@ -57,14 +61,14 @@ function swipedetect(el, callback) {
 
 		if (elapsedTime <= allowedTime) { // first condition for awipe met
 			if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint) { // 2nd condition for horizontal swipe met
-				swipedir = (distX < 0)? 'left' : 'right'; // if dist traveled is negative, it indicates left swipe
+				swipedir = (distX < 0) ? { x: -1, y: 0} : { x: 1, y: 0}; //'left' : 'right'; // if dist traveled is negative, it indicates left swipe
 			}
 			else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint) { // 2nd condition for vertical swipe met
-				swipedir = (distY < 0)? 'up' : 'down'; // if dist traveled is negative, it indicates up swipe
+				swipedir = (distY < 0) ? { x: 0, y: -1} : { x: 0, y: 1}; // 'up' : 'down'; // if dist traveled is negative, it indicates up swipe
 			}
 		}
 
-		handleswipe(swipedir);
+		handleSwipe({ x: startX, y: startY }, swipedir);
 		e.preventDefault()
 	}, false)
 }
