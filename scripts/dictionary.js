@@ -8,7 +8,7 @@ var Kanjidic = function () {
      * @param cb
      * @returns {*}
      */
-    this.load = function (filename, cb) {
+    this.load = function (preloader, filename, cb) {
         console.log('loading kanji dictionary...');
 
         if (!filename) {
@@ -22,13 +22,37 @@ var Kanjidic = function () {
 
         xobj.onreadystatechange = function () {
             if (xobj.readyState === 4 && xobj.status === 200) {
-                // .open will NOT return a value but simply returns undefined in async mode so use a callback
-                self.data =JSON.parse(xobj.responseText);
-                cb();
+                domutils.setText(preloader, 'loading dictionary 100%');
+                window.setTimeout(function () {
+                    // .open will NOT return a value but simply returns undefined in async mode so use a callback
+                    self.data =JSON.parse(xobj.responseText);
+
+                    // return callback once the file has been loaded and parsed
+                    if (cb) { cb(); }
+                }, 0);
+
             }
         };
 
+        xobj.onprogress = function (e) {
+            var percent = Math.round(e.loaded * 100 / e.total);
+            domutils.setText(preloader, 'loading dictionary ' + percent + '%');
+            //console.log('loading dictionary ' + percent + '%');
+        };
+
         xobj.send(null);
+    };
+
+
+    // TODO: We cannot store all this data since is a lot more than 2.5Mb, we need to find a workaround
+    this.saveToLocalStorage = function (data) {
+        window.localStorage.setItem('kanjidic2', JSON.stringify(data));
+    };
+
+    // TODO: We cannot store all this data since is a lot more than 2.5Mb, we need to find a workaround
+    this.loadFromLocalStorage = function () {
+        var value = window.localStorage.getItem('kanjidic2');
+        return value && JSON.parse(value);
     };
 
 

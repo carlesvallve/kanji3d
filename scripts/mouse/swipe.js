@@ -17,11 +17,28 @@ function swipedetect(touchsurface, callback) {
 		distX,
 		distY,
 		threshold = 5, //required min distance traveled to be considered swipe
-		restraint = 200, // maximum distance allowed at the same time in perpendicular direction
+		restraint = 320, // maximum distance allowed at the same time in perpendicular direction
 		allowedTime = 1000, // maximum time allowed to travel that distance
 		elapsedTime,
 		startTime,
 		handleSwipe = callback || function(point, swipedir) {};
+
+
+    // get the touchsurface relative offset on the page
+
+    function getOffset(element) {
+        var xPosition = 0;
+        var yPosition = 0;
+
+        while(element) {
+            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+            yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+            element = element.offsetParent;
+        }
+        return { left: xPosition, top: yPosition };
+    }
+
+    var offset = getOffset(touchsurface);
 
 
 	// touch start
@@ -31,9 +48,9 @@ function swipedetect(touchsurface, callback) {
 
         //alert('touch start!');
 
-		swipedir = null; //'none';
-		startX = touchobj.pageX - touchsurface.offsetLeft;
-		startY = touchobj.pageY - touchsurface.offsetTop;
+		swipedir = null;
+		startX = touchobj.pageX - offset.left;
+		startY = touchobj.pageY - offset.top;
 		startTime = new Date().getTime(); // record time when finger first makes contact with surface
 		e.preventDefault();
 
@@ -49,8 +66,8 @@ function swipedetect(touchsurface, callback) {
 
         //alert('touch end!');
 
-        endX = touchobj.pageX - touchsurface.offsetLeft;
-        endY = touchobj.pageY - touchsurface.offsetTop;
+        endX = touchobj.pageX - offset.left;
+        endY = touchobj.pageY - offset.top;
 		distX = endX - startX; // get horizontal dist traveled by finger while in contact with surface
 		distY = endY - startY; // get vertical dist traveled by finger while in contact with surface
 

@@ -4,7 +4,7 @@ var Tweener = function() {
         // set default params
 
         options = options || {};
-        var time = options.time || 500;
+        var time = options.time || 500; // milliseconds
         var delay = options.delay || 0;
         var ease = options.easing || 'ease-in-out';
         var elm = dom;//.rootElement;

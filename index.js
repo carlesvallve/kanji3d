@@ -1,45 +1,56 @@
 console.log('Welcome to kanji-3D');
 
-window.onload = function() {
-    var kanjidic = new Kanjidic('./assets/data/kanjidic2.json.zip');
-    kanjidic.load('./assets/data/kanjidic2.json', function () {
-        console.log(kanjidic);
-        //alert('Welcome to KanjiDic');
+var kanjidic;
+var easing = 'cubic-bezier(0.455, 0.03, 0.515, 0.955)';
 
-        var container = domutils.appendChild('div', document.body, 'app');
+var App = function () {
+    var self = this;
 
-        var battle = new Battle(container);
+    this.elm = domutils.appendChild('div', document.body, 'app');
+    this.preloader = domutils.appendChild('div', document.body, 'preloader');
 
-        var tileboard = new Tileboard(container, 7, 5);
-        tileboard.createTiles();
+    // create header
+    this.header = new Header(this.elm);
 
-        // initialize tileboard at chapter 1 of jlpt 4
-        var category = kanjidic.filterByCategory(4, 'jlpt', 'freq');
-        tileboard.initChapter(category, 2);
+    // create battle area
+    this.battle = new Battle(this.elm);
+
+    // create tileboard
+    self.tileboard = new Tileboard(self.elm, 7, 5);
 
 
-        // =========================================================
-        //console.log('jlpt4', category.length, 'kanjis:', category);
+    this.loadDictionary = function () {
+        kanjidic = new Kanjidic();
+        kanjidic.load(self.preloader, './assets/data/kanjidic2.json', function () {
+            tweener.tween(self.preloader, { opacity: 0 }, { time: 500, delay: 0, easing: 'ease' }, function () {
+                // initialize application display
+                self.preloader.style.display = 'none';
+                self.init();
+            });
+        });
+    };
 
-        // search for a single kanji  entry
-        //var results = kanjidic.search('literal', '女');
-        //console.log(results);
 
-        // search all kanjis in a given category
-        /*var results = kanjidic.filterByCategory(4, 'jlpt', 'freq');
-         console.log('jlpt4', results.length, 'kanjis:', results);*/
-
-        // display random kanjis from category
-        /*var kanjis = [];
-         for (var i = 0; i < results.length; i++) {
-         var entry = results[i]; //results[~~(Math.random() * results.length - 1)];
-         domutils.appendChild('span', document.body, 'kanji', entry.literal);
-         kanjis.push(entry);
-         }*/
-        // =========================================================
-
-    });
+    this.init = function () {
+        self.header.init();
+        self.tileboard.init();
+        self.battle.init();
+    };
 };
+
+
+window.onload = function() {
+    // disable page scroll
+    domutils.disableScroll();
+
+    // init application
+    var app = new App();
+
+    // load kanji dictionary
+    app.loadDictionary();
+};
+
+
 
 
 

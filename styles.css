@@ -1,72 +1,138 @@
 html {}
 
-
 body {
     margin: 0 0;
-    padding: 0 0: //10px 10px;
-    background-color: #eee; /*#474747; #222;*/
+    padding: 0 0;
+    background-color: #eee;
     color: #000;
+    font-family: Verdana, sans-serif;
+}
+
+div {
+    -webkit-user-select: none;
+}
+
+.preloader {
+    position: absolute;
+    top: 180px;
+    width: 320px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10px;
+    color: #fff;
 }
 
 .app {
+    overflow: hidden;
+    position: absolute;
     width: 320px;
     height: 372px;
-    background-color: #000;
+    background-color: #666;
+}
+
+.header {
+    position: relative;
+    left: 0; top: 0;
+    width: 320px;
+    height: 40px;
+    background-color: #111;
 }
 
 .battle {
+    overflow: hidden;
     position: relative;
-    left: 0; top: 2px;
+    left: 0; top: 0;
     width: 320px;
-    height: 140px;
-    background-color: #222;
+    height: 100px;
+}
+
+.battleBg {
+    position: relative;
+    left: 0; top: 0;
+    width: 320px;
+    height: 120px;
+}
+
+.tileboardArea {
+    position: relative;
+    left: 0; top: 0;
+    width: 320px;
+    height: 232px;
+    background-color: #111;
 }
 
 .tileboard {
     position: relative;
     border-radius: 10px;
-    left: 5px; top: 5px;
-    padding-top: 1px;
+    left: 8px; top: 8px;
 }
-
 
 .tile {
     position: absolute;
 }
 
-
-.block {
-    position: relative;
-    background-color: #1f1f1f   ;
-    border-radius: 25%;
-    left: 50%; top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    /*opacity: 0.8;*/
-}
-
-.kanji {
-    position: relative;
-    font-family: Impact, Verdana;
-    text-align: center;
-    font-weight: bold;
-    font-size: 26px;
-    color: #1f1f1f;
-    opacity: 0.9
-
-    /*text-shadow: 0 0 1px #000, 0 0 2px #000, 0 0 3px #fff, 0 0 4px #ffcc00, 0 0 7px #ffcc00, 0 0 8px #ffcc00, 0 0 10px #ffcc00, 0 0 15px #ffcc00;
-*/
-}
-
 .info {
     position: absolute;
     left: 4px; top: 4px;
-    font-family: Verdana;
     text-align: center;
     font-weight: normal;
     font-size: 8px;
     color: #fff;
     opacity: 1;
-
-    /*text-shadow: 0px 1px 1px #000;*/
 }
+
+.button {
+    text-align: center;
+    font-weight: bold;
+    font-size: 26px;
+    line-height: 38px;
+    text-decoration: none;
+    text-shadow: rgba(255,255,255,1) 0 1px 0;
+
+    border-radius: 8px;
+    border-top: 1px solid rgba(255,255,255,0.8);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+
+    background-image: -webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from( rgba(255,255,255,0) ), to( rgba(255,255,255,0.7) )), url(assets/textures/buttons/noise.png);
+
+    color: hsl(0, 0%, 40%) !important;
+    background-color: hsl(0, 0%, 75%);
+
+    /*
+    box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(0, 0%, 60%) 0 .1em 3px, hsl(0, 0%, 45%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
+    */
+}
+
+.button.white {
+    color: hsl(0, 0%, 40%) !important;
+    background-color: hsl(0, 0%, 75%);
+    /*
+    box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(0, 0%, 60%) 0 .1em 3px, hsl(0, 0%, 45%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
+    */
+}
+
+.button.orange {
+    color: hsl(39, 100%, 30%) !important;
+    background-color: hsl(39, 100%, 50%);
+    /*
+    box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(39, 100%, 40%) 0 .1em 3px, hsl(39, 100%, 30%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
+    */
+}
+
+.button.pink {
+    color: hsl(340, 100%, 30%) !important;
+    background-color: hsl(340, 100%, 75%);
+    /*
+    box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(340, 70%, 50%) 0 .1em 3px, hsl(340, 80%, 40%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
+    */
+}
+
+.button.blue {
+    color: hsl(208, 50%, 40%) !important;
+    background-color: hsl(208, 100%, 75%);
+    /*
+    box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(208, 50%, 55%) 0 .1em 3px, hsl(208, 50%, 40%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
+    */
+}
+
 

@@ -6,43 +6,34 @@ var Tile = function (tileboard, x, y) {
     this.y = y;
 
     // create tile elements
-    this.elm = domutils.appendChild('div', tileboard.elm, 'tile');
-    this.elm.block = domutils.appendChild('div', this.elm, 'block');
-    this.elm.kanji = domutils.appendChild('div', this.elm.block, 'kanji');
-    //this.elm.info = domutils.appendChild('div', this.elm.block, 'info', this.x + ',' + this.y);
+    this.elm = domutils.appendChild('div', tileboard.board, 'tile');
 
     // size
-    this.elm.style.width = tileboard.tileSize + 'px';
-    this.elm.style.height = tileboard.tileSize + 'px';
-    this.elm.block.style.width = (tileboard.tileSize - 4) + 'px';
-    this.elm.block.style.height = (tileboard.tileSize - 4) + 'px';
+    this.elm.style.width = '40px';
+    this.elm.style.height = '38px';
 
     // location
     this.pos = tileboard.gridToPixel(x, y);
     this.elm.style.webkitTransform = 'translate(' + this.pos.x + 'px, ' + this.pos.y + 'px)';
 
 
-    this.init = function (x, y, colors, data) {
+    this.init = function (x, y, color, data) {
         // set vars
         this.x = x;
         this.y = y;
-        this.colors = colors;
+        this.color = color;
         this.data = data;
 
-        // locate
+        // set tile class
+        this.elm.className = 'tile button ' + this.color;
+
+        // set tile text
+        domutils.setText(this.elm, this.data.literal);
+
+        // locate tile
         this.pos = tileboard.gridToPixel(x, y);
         this.elm.style.webkitTransform = 'translate(' + this.pos.x + 'px, ' + this.pos.y + 'px)';
-
-        // colorize
-        //this.elm.block.style.backgroundColor = this.colors[0];
-        //this.elm.kanji.style.color = this.colors[0];
-        /*this.elm.kanji.style.textShadow =
-            '0 1px 2px ' + colors[1] + ', 0 -1px 1px ' + colors[0] + ', inset 0 -1px 1px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.5)';
-*/
-        this.elm.kanji.style.textShadow = '0 0 1px #000, 0 0 2px #000, 0 0 3px #000, ' +
-            '0 0 4px ' + colors[0] + ', 0 0 7px ' + colors[0] + ', 0 0 8px ' + colors[0] + ', 0 0 10px ' + colors[0] + ', 0 0 15px ' + colors[0];
-        // fill with data
-        domutils.setText(this.elm.kanji, this.data.literal);
+        this.elm.style.zIndex = this.pos.y;
     };
 
 
@@ -53,10 +44,10 @@ var Tile = function (tileboard, x, y) {
 
         // move tile to new pos
         tweener.tween(this.elm,
-            { 'webkitTransform': 'translate(' + pos.x + 'px, ' + pos.y + 'px)' },
-            { time: 150, delay: 0, easing: 'ease' },
+            { 'webkitTransform': 'translate(' + pos.x + 'px, ' + pos.y + 'px)', zIndex: pos.y },
+            { time: 200, delay: 0, easing: window.easing },
             function () {
-               // domutils.setText(self.elm.info, self.x + ',' + self.y);
+               // domutils.setText(self.info, self.x + ',' + self.y);
             }
         );
     };

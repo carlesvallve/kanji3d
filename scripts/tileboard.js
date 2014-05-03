@@ -11,9 +11,27 @@ var Tileboard = function (container, width, height) {
 
 	// create tileboard elements
 
-	this.elm = domutils.appendChild('div', container, 'tileboard');
-	this.elm.style.width = (width * this.tileSize) + 'px';
-	this.elm.style.height = (height * this.tileSize) + 'px';
+	this.elm = domutils.appendChild('div', container, 'tileboardArea');
+    this.elm.style.webkitTransform = 'translate(0, 120%)';
+
+    this.board = domutils.appendChild('div', this.elm, 'tileboard');
+	this.board.style.width = (width * this.tileSize) + 'px';
+	this.board.style.height = (height * this.tileSize) + 'px';
+
+
+    this.init = function () {
+        // create empty tiles
+        self.createTiles();
+
+        // initialize tileboard at chapter 1 of category jlpt4
+        var category = kanjidic.filterByCategory(4, 'jlpt', 'freq');
+        self.initChapter(category, 2);
+
+        // display tileboard
+        tweener.tween(this.elm,
+            { 'webkitTransform': 'translate(0, 0)' }, { time: 500, delay: 0, easing: window.easing },
+            function () {});
+    };
 
 
     // create tiles
@@ -35,19 +53,20 @@ var Tileboard = function (container, width, height) {
 		// set chapter vars
 		this.chapter = {
 			kanjis:[],
-			//colors: [['#ccc', '#900'], ['#999', '#330'], ['#666', '#033'], ['#333', '#930']]
-            colors: [['#f00', '#900'], ['#ff0', '#330'], ['#0ff', '#033'], ['#f90', '#930']]
+            colors: ['white', 'orange', 'pink', 'blue']
 		};
 
 		// get kanjis on current chapter num
         var max = 4;
         var start = max * (chapterNum - 1);
         var end = start + max;
+
+        var str = '';
 		for (var i = start; i < end; i++) {
 			this.chapter.kanjis.push(category[i]);
+            str +=' ' + category[i].literal;
 		}
-
-        console.log('chapter', chapterNum +':', this.chapter.kanjis);
+        console.log('chapter' + chapterNum + ':' + str);
 
 		// initialize current chapter tiles
 		for (var y = 0; y < this.height; y++) {
@@ -61,16 +80,16 @@ var Tileboard = function (container, width, height) {
 
     this.gridToPixel = function (x, y) {
         return {
-            x: x * this.tileSize,
-            y: y * this.tileSize
+            x: x * (this.tileSize),
+            y: y * (this.tileSize)
         };
     };
 
 
     this.pixelToGrid = function (pos) {
         return {
-            x: Math.floor(pos.x / this.tileSize),
-            y: Math.floor(pos.y / this.tileSize)
+            x: Math.floor(pos.x / (this.tileSize)),
+            y: Math.floor(pos.y / (this.tileSize))
         };
     };
 
@@ -108,6 +127,6 @@ var Tileboard = function (container, width, height) {
         tile2.moveTo(pos1);
 	};
 
-	swipedetect(this.elm, this.swipeTiles);
+	swipedetect(this.board, this.swipeTiles);
 };
 
