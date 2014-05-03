@@ -113,10 +113,14 @@ var Tileboard = function (container, width, height) {
 
 
     this.setTile = function (tile, x, y) {
+        self.tiles[y][x] = tile;
+        if (!tile) { tile = false; return; }
+
         tile.x = x;
         tile.y = y;
-        tile.pos = this.gridToPixel(x, y);
-        this.tiles[y][x] = tile;
+        tile.pos = self.gridToPixel(x, y);
+
+        //domutils.setText(tile.elm, tile.x + ',' + tile.y);
     };
 
 
@@ -130,15 +134,28 @@ var Tileboard = function (container, width, height) {
 		var tile1 = self.getTileAtPos(pos);
         var tile2 = self.getTileAtPos( { x: pos.x + dir.x * self.tileSize, y: pos.y + dir.y * self.tileSize });
 
+        if (!tile1 || !tile2) { return; }
+        if (tile1.moving || tile2.moving) { return; }
+
         // get both positions
-        var pos1 = { x: tile1.pos.x, y: tile1.pos.y };
-        var pos2 = { x: tile2.pos.x, y: tile2.pos.y };
+        var pos1 = { x: tile1.pos.x, y: tile1.pos.y, gx: tile1.x, gy: tile1.y };
+        var pos2 = { x: tile2.pos.x, y: tile2.pos.y, gx: tile2.x, gy: tile2.y };
 
         // move both tiles to new positions
 
-        tile2.moveTo(pos1);
-        tile1.moveTo(pos2, function () {
-            self.checkMatches(tile1);
+        // move tile1 to pos2
+        self.setTile(tile1, pos2.gx, pos2.gy);
+        tile1.moveTo(pos2, 250);
+
+        // move tile2 to pos1
+        self.setTile(tile2, pos1.gx, pos1.gy);
+        tile2.moveTo(pos1, 250);
+
+        self.wait(350, function () {
+            var totalMatches = self.checkMatches();
+            if (totalMatches > 0) {
+                self.destroyMatchingTiles();
+            }
         });
 	};
 
@@ -148,6 +165,7 @@ var Tileboard = function (container, width, height) {
     // check for tileboard matches
 
     this.checkMatches = function () {
+        var totalMatches = 0;
 
         function floodFill(tile, x, y) {
             // get new tile
@@ -163,6 +181,7 @@ var Tileboard = function (container, width, height) {
 
             // add +1 to matches
             tile.matches += 1;
+            totalMatches++;
 
             // add target tile to visited array
             tile.visited.push(target);
@@ -174,28 +193,76 @@ var Tileboard = function (container, width, height) {
             if (y < self.height - 1) { floodFill(tile, x, y + 1); }
         }
 
-        var x, y, tile;
-
-        for (y = 0; y < this.height; y++) {
-            for (x = 0; x < this.width; x++) {
-                tile = this.getTile(x, y);
-                tile.matches = 0;
-                tile.elm.style.opacity = 0.5;
-                tile.visited = [];
-                floodFill(tile, tile.x, tile.y);
-            }
-        }
-
-        // destroy all matching tiles
-        for (y = 0; y < this.height; y++) {
-            for (x = 0; x < this.width; x++) {
-                tile = this.getTile(x, y);
-                if (tile.matches >= 3) {
-                    tile.elm.style.opacity = 1;
-                    domutils.setText(tile.info, tile.matches);
+        for (var y = 0; y < this.height; y++) {
+            for (var x = 0; x < this.width; x++) {
+                var tile = this.getTile(x, y);
+                if (tile) {
+                    tile.matches = 0;
+                    tile.visited = [];
+                    floodFill(tile, tile.x, tile.y);
                 }
             }
         }
+
+        return totalMatches;
+    };
+
+
+    this.destroyMatchingTiles = function() {
+        // destroy all matching tiles
+        for (var x = 0; x < this.width; x++) {
+            for (var y = 0; y < this.height; y++) {
+                var tile = this.getTile(x, y);
+                if (tile && tile.matches >= 3) {
+                    tile.destroy(250);
+                }
+            }
+        }
+
+        // aply gravity on upper tiles
+        this.wait(350, function () {
+            self.applyGravity();
+        });
+    };
+
+
+    this.applyGravity = function () {
+        for (var x = 0; x < this.width; x++) {
+            for (var y = this.height - 1; y >= 0; y--) {
+                var tile = this.getTile(x, y);
+                if (!tile) { continue; }
+
+                var spaces = 0;
+                for (var i = tile.y + 1; i < self.height; i++) {
+                    var tile2 = this.getTile(tile.x, i);
+                    if (tile2) { break; }
+                    spaces++;
+                }
+
+                if (spaces > 0) {
+                    var yy = tile.y + spaces;
+                    this.setTile(null, tile.x, tile.y);
+                    this.setTile(tile, tile.x, yy);
+                    tile.moveTo({ x: tile.pos.x, y: yy * this.tileSize}, 250);
+                }
+            }
+        }
+
+        this.wait(350, function () {
+            var totalMatches = self.checkMatches();
+            if (totalMatches > 0) {
+                self.destroyMatchingTiles();
+            }
+        });
+
+    };
+
+
+
+    this.wait = function (time, cb) {
+        tweener.tween(this.elm, {}, { time: time, delay: 0 }, function () {
+            cb();
+        });
     };
 
 };

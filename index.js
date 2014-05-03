@@ -3,11 +3,13 @@ console.log('Welcome to kanji-3D');
 var kanjidic;
 var easing = 'cubic-bezier(0.455, 0.03, 0.515, 0.955)';
 
+var stats;
+
 var App = function () {
     var self = this;
 
     this.elm = domutils.appendChild('div', document.body, 'app');
-    this.preloader = domutils.appendChild('div', document.body, 'preloader');
+    this.preloader = domutils.appendChild('div', document.body, 'preloader')
 
     // create header
     this.header = new Header(this.elm);

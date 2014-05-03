@@ -7,9 +7,8 @@ var Tile = function (tileboard, x, y) {
 
     // create tile elements
     this.elm = domutils.appendChild('div', tileboard.board, 'tile');
-    this.info = domutils.appendChild('div', this.elm, 'info', '?');
+    //this.info = domutils.appendChild('div', this.elm, 'info', '?');
 
-    //console.log(this.info);
 
     // size
     this.elm.style.width = '40px';
@@ -32,6 +31,7 @@ var Tile = function (tileboard, x, y) {
 
         // set tile text
         domutils.setText(this.elm, this.data.literal);
+        //domutils.setText(this.elm, this.x + ',' + this.y);
 
         // locate tile
         this.pos = tileboard.gridToPixel(x, y);
@@ -40,19 +40,29 @@ var Tile = function (tileboard, x, y) {
     };
 
 
-    this.moveTo = function (pos, cb) {
-        // set tile on array
-        var gridpos = tileboard.pixelToGrid(pos);
-        tileboard.setTile(self, gridpos.x, gridpos.y);
+    this.moveTo = function (pos, time, cb) {
+        this.moving = true;
 
         // move tile to new pos
         tweener.tween(this.elm,
-            { 'webkitTransform': 'translate(' + pos.x + 'px, ' + pos.y + 'px)', zIndex: pos.y },
-            { time: 200, delay: 0, easing: window.easing },
+            { webkitTransform: 'translate(' + pos.x + 'px, ' + pos.y + 'px)', zIndex: pos.y },
+            { time: time, delay: 0, easing: window.easing },
             function () {
-                // domutils.setText(self.info, self.x + ',' + self.y);
-
+                self.moving = false;
                 if (cb) { cb(); }
+            }
+        );
+    };
+
+
+    this.destroy = function (time, cb) {
+        tileboard.setTile(null, self.x, self.y);
+
+        tweener.tween(this.elm,
+            { webkitTransform: 'translate(' + this.pos.x + 'px, ' + this.pos.y + 'px) scale(0.1)', opacity: 0 },
+            { time: time, delay: 0, easing: window.easing },
+            function () {
+                self.elm.style.display = 'none';
             }
         );
     };
