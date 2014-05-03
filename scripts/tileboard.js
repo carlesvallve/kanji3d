@@ -100,6 +100,12 @@ var Tileboard = function (container, width, height) {
     };
 
 
+    this.getTile = function (x, y) {
+        if (x < 0 || y < 0 || x > this.width - 1 || y > this.height - 1) { return null; }
+        return this.tiles[y][x];
+    };
+
+
     this.setTile = function (tile, x, y) {
         tile.x = x;
         tile.y = y;
@@ -123,46 +129,69 @@ var Tileboard = function (container, width, height) {
         var pos2 = { x: tile2.pos.x, y: tile2.pos.y };
 
         // move both tiles to new positions
-        tile1.moveTo(pos2);
+
         tile2.moveTo(pos1);
+        tile1.moveTo(pos2, function () {
+            self.checkMatches(tile1);
+        });
 	};
 
 	swipedetect(this.board, this.swipeTiles);
 
 
-    /*this.checkMatches = function () {
-        var bMatchesFound = false;
-        var matchList = [];
 
-        while ( bMatchesFound ) {
-            bMatchesFound = false;
 
-            var matchColor = gameBoard[0].color;
 
-            int startPos = 0;
-            for ( int curPos=1; curPos < gameBoard.len(); curPos++ ) {
-                if ( gameBoard[curPos].color != matchColor ) {
-                    // we've ended a run; now check to see if it was long enough
-                    if ( curPos-startPos >= 3 ) {
-                        // It was - go ahead and add it to our list of matches
-                        matchList.add(Match(startPos, curPos-1, matchColor));
-                        bMatchesFound = true;
-                    }
-                    // now, regardless, make sure we start a new match-run here
-                    startPos = curPos;
-                    matchColor = gameBoard[curPos].color;
+    this.checkMatches = function (mytile) {
+
+        function floodFill(tile, x, y, dir) {
+            // get new tile
+            var target = self.getTile(x, y);
+
+            // escape if no target or target is of different color
+            if (!target || target.color !== tile.color) { return; }
+
+            // escape if target is already visited
+            for (var i = 0; i < tile.visited.length; i++) {
+                if (target === tile.visited[i]) { return; }
+            }
+
+            // add +1 to matches
+            tile.matches += 1;
+
+            // add target tile to visited array
+            tile.visited.push(target);
+
+            // recurse to next target in 4 directions
+            if (x > 0) { floodFill(tile, x - 1, y); }
+            if (y > 0){ floodFill(tile, x, y - 1); }
+            if (x < self.width - 1) { floodFill(tile, x + 1, y); }
+            if (y < self.height - 1) { floodFill(tile, x, y + 1); }
+        }
+
+        var x, y, tile;
+
+        for (y = 0; y < this.height; y++) {
+            for (x = 0; x < this.width; x++) {
+                tile = this.getTile(x, y);
+                tile.matches = 0;
+                tile.elm.style.opacity = 0.5;
+                tile.visited = [];
+                floodFill(tile, tile.x, tile.y);
+            }
+        }
+
+        // destroy all matching tiles
+        for (y = 0; y < this.height; y++) {
+            for (x = 0; x < this.width; x++) {
+                tile = this.getTile(x, y);
+                if (tile.matches >= 3) {
+                    tile.elm.style.opacity = 1;
+                    domutils.setText(tile.info, tile.matches);
                 }
             }
-            // Finally, check for a match at the end - if our 'last' startPos
-            // was far enough back.
-            if ( startPos <= gameBoard.len()-3 ) {
-                matchList.add(Match(startPos, gameBoard.len()-1, matchColor);
-                bMatchesFound = true;
-            }
-            // 'destroy' all our matches (with suitable pyrotechnics)
-            destroyMatches(matchList);
-            // and keep doing this until we run out of matches
         }
-    };*/
+    };
+
 };
 

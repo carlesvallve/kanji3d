@@ -7,6 +7,9 @@ var Tile = function (tileboard, x, y) {
 
     // create tile elements
     this.elm = domutils.appendChild('div', tileboard.board, 'tile');
+    this.info = domutils.appendChild('div', this.elm, 'info', '?');
+
+    //console.log(this.info);
 
     // size
     this.elm.style.width = '40px';
@@ -37,7 +40,7 @@ var Tile = function (tileboard, x, y) {
     };
 
 
-    this.moveTo = function (pos) {
+    this.moveTo = function (pos, cb) {
         // set tile on array
         var gridpos = tileboard.pixelToGrid(pos);
         tileboard.setTile(self, gridpos.x, gridpos.y);
@@ -47,7 +50,9 @@ var Tile = function (tileboard, x, y) {
             { 'webkitTransform': 'translate(' + pos.x + 'px, ' + pos.y + 'px)', zIndex: pos.y },
             { time: 200, delay: 0, easing: window.easing },
             function () {
-               // domutils.setText(self.info, self.x + ',' + self.y);
+                // domutils.setText(self.info, self.x + ',' + self.y);
+
+                if (cb) { cb(); }
             }
         );
     };
