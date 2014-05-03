@@ -54,6 +54,7 @@ div {
 }
 
 .tileboardArea {
+    overflow: hidden;
     position: relative;
     left: 0; top: 0;
     width: 320px;
@@ -84,7 +85,7 @@ div {
 .button {
     text-align: center;
     font-weight: bold;
-    font-size: 11px; //26px;
+    font-size: 13px; //26px;
     line-height: 36px;
     text-decoration: none;
     text-shadow: rgba(255,255,255,1) 0 1px 0;

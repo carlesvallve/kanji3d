@@ -57,7 +57,7 @@ var Tileboard = function (container, width, height) {
 		};
 
 		// get kanjis on current chapter num
-        var max = 4;
+        var max = this.chapter.colors.length;
         var start = max * (chapterNum - 1);
         var end = start + max;
 
@@ -114,12 +114,13 @@ var Tileboard = function (container, width, height) {
 
     this.setTile = function (tile, x, y) {
         self.tiles[y][x] = tile;
-        if (!tile) { tile = false; return; }
+        if (!tile) { return null; }
 
         tile.x = x;
         tile.y = y;
         tile.pos = self.gridToPixel(x, y);
 
+        return tile;
         //domutils.setText(tile.elm, tile.x + ',' + tile.y);
     };
 
@@ -220,7 +221,7 @@ var Tileboard = function (container, width, height) {
         }
 
         // aply gravity on upper tiles
-        this.wait(350, function () {
+        this.wait(250, function () {
             self.applyGravity();
         });
     };
@@ -248,20 +249,53 @@ var Tileboard = function (container, width, height) {
             }
         }
 
-        this.wait(350, function () {
+        // repopulate tileboard
+        //window.setTimeout(function () {
+            self.repopulate();
+        //}, 0);
+
+        /*this.wait(100, function () {
+            self.repopulate();
+        });*/
+
+        // wait for repopulation, then re-check for new tile matches
+        /*this.wait(2000, function () {
             var totalMatches = self.checkMatches();
             if (totalMatches > 0) {
                 self.destroyMatchingTiles();
             }
-        });
-
+        });*/
     };
 
+
+    this.repopulate = function () {
+
+        for (var x = 0; x < this.width; x++) {
+            for (var y = 0; y < this.height; y++) {
+                var tile = this.getTile(x, y);
+                if (!tile) {
+                    tile = this.setTile(new Tile(this, x, y), x, y);
+
+                    var num = utils.randomInt(0, this.chapter.colors.length - 1);
+                    tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
+
+                    tile.elm.style.webkitTransform = 'translate(' + tile.pos.x + 'px, ' + ((tile.y - 4) * this.tileSize) + 'px)';
+                    //tile.elm.style.opacity = 0;
+
+                    var delay = (5 - tile.y) * 50;
+                    tile.moveTo(tile.pos, 250, delay);
+                    //tweener.tween(tile.elm, { opacity: 1 }, { time: 250, delay: delay });
+                }
+            }
+        }
+    };
 
 
     this.wait = function (time, cb) {
         tweener.tween(this.elm, {}, { time: time, delay: 0 }, function () {
-            cb();
+            //window.setTimeout(function () {
+                cb();
+           // }, 0);
         });
     };
 
