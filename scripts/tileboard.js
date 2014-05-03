@@ -128,5 +128,41 @@ var Tileboard = function (container, width, height) {
 	};
 
 	swipedetect(this.board, this.swipeTiles);
+
+
+    /*this.checkMatches = function () {
+        var bMatchesFound = false;
+        var matchList = [];
+
+        while ( bMatchesFound ) {
+            bMatchesFound = false;
+
+            var matchColor = gameBoard[0].color;
+
+            int startPos = 0;
+            for ( int curPos=1; curPos < gameBoard.len(); curPos++ ) {
+                if ( gameBoard[curPos].color != matchColor ) {
+                    // we've ended a run; now check to see if it was long enough
+                    if ( curPos-startPos >= 3 ) {
+                        // It was - go ahead and add it to our list of matches
+                        matchList.add(Match(startPos, curPos-1, matchColor));
+                        bMatchesFound = true;
+                    }
+                    // now, regardless, make sure we start a new match-run here
+                    startPos = curPos;
+                    matchColor = gameBoard[curPos].color;
+                }
+            }
+            // Finally, check for a match at the end - if our 'last' startPos
+            // was far enough back.
+            if ( startPos <= gameBoard.len()-3 ) {
+                matchList.add(Match(startPos, gameBoard.len()-1, matchColor);
+                bMatchesFound = true;
+            }
+            // 'destroy' all our matches (with suitable pyrotechnics)
+            destroyMatches(matchList);
+            // and keep doing this until we run out of matches
+        }
+    };*/
 };
 

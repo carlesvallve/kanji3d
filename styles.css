@@ -91,12 +91,13 @@ div {
 
     border-radius: 8px;
     border-top: 1px solid rgba(255,255,255,0.8);
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    /*border-bottom: 1px solid rgba(0,0,0,0.1);*/
 
     background-image: -webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from( rgba(255,255,255,0) ), to( rgba(255,255,255,0.7) )), url(assets/textures/buttons/noise.png);
 
     color: hsl(0, 0%, 40%) !important;
     background-color: hsl(0, 0%, 75%);
+    border-bottom: 3px solid hsl(0, 0%, 35%);
 
     /*
     box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(0, 0%, 60%) 0 .1em 3px, hsl(0, 0%, 45%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
@@ -106,6 +107,7 @@ div {
 .button.white {
     color: hsl(0, 0%, 40%) !important;
     background-color: hsl(0, 0%, 75%);
+    border-bottom: 3px solid hsl(0, 0%, 50%);
     /*
     box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(0, 0%, 60%) 0 .1em 3px, hsl(0, 0%, 45%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
     */
@@ -114,6 +116,7 @@ div {
 .button.orange {
     color: hsl(39, 100%, 30%) !important;
     background-color: hsl(39, 100%, 50%);
+    border-bottom: 3px solid hsl(39, 50%, 35%);
     /*
     box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(39, 100%, 40%) 0 .1em 3px, hsl(39, 100%, 30%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
     */
@@ -122,6 +125,7 @@ div {
 .button.pink {
     color: hsl(340, 100%, 30%) !important;
     background-color: hsl(340, 100%, 75%);
+    border-bottom: 3px solid hsl(340, 50%, 50%);
     /*
     box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(340, 70%, 50%) 0 .1em 3px, hsl(340, 80%, 40%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
     */
@@ -130,6 +134,7 @@ div {
 .button.blue {
     color: hsl(208, 50%, 40%) !important;
     background-color: hsl(208, 100%, 75%);
+    border-bottom: 3px solid hsl(208, 50%, 50%);
     /*
     box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(208, 50%, 55%) 0 .1em 3px, hsl(208, 50%, 40%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
     */

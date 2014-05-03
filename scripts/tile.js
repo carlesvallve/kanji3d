@@ -10,7 +10,7 @@ var Tile = function (tileboard, x, y) {
 
     // size
     this.elm.style.width = '40px';
-    this.elm.style.height = '38px';
+    this.elm.style.height = '37px';
 
     // location
     this.pos = tileboard.gridToPixel(x, y);
