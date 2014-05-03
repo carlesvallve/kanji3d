@@ -71,8 +71,14 @@ var Tileboard = function (container, width, height) {
 		// initialize current chapter tiles
 		for (var y = 0; y < this.height; y++) {
 			for (var x = 0; x < this.width; x++) {
-				var num = utils.randomInt(0, max - 1);
-				this.tiles[y][x].init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
+                var tile = this.getTile(x, y);
+                // make sure that new tiles never match when initialized
+                tile.matches = 3;
+                while (tile.matches >= 3) {
+                    var num = utils.randomInt(0, max - 1);
+                    tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
+                    this.checkMatches();
+                }
 			}
 		}
 	};
@@ -139,12 +145,11 @@ var Tileboard = function (container, width, height) {
 	swipedetect(this.board, this.swipeTiles);
 
 
+    // check for tileboard matches
 
+    this.checkMatches = function () {
 
-
-    this.checkMatches = function (mytile) {
-
-        function floodFill(tile, x, y, dir) {
+        function floodFill(tile, x, y) {
             // get new tile
             var target = self.getTile(x, y);
 
