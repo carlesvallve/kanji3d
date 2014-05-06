@@ -179,7 +179,16 @@ var Tileboard = function (container, width, height) {
 		var tile1 = self.getTileAtPos(pos);
         var tile2 = self.getTileAtPos( { x: pos.x + dir.x * self.tileSize, y: pos.y + dir.y * self.tileSize });
 
-        if (!tile1 || !tile2) { return; }
+        //if (!tile1 || !tile2) { return; }
+        if (!tile1) { return; }
+
+        if (!tile2) {
+            tile2 = {
+                x: tile1.x + dir.x, y: tile1.y + dir.y,
+                pos: { x: tile1.pos.x + dir.x * self.tileSize, y: tile1.pos.y + dir.y * self.tileSize }
+            };
+        }
+
         if (tile1.rected || tile2.rected) { return; }
         if (tile1.moving || tile2.moving) { return; }
 
@@ -194,17 +203,18 @@ var Tileboard = function (container, width, height) {
         tile1.moveTo(pos2, { time: 250 });
 
         // move tile2 to pos1
-        self.setTile(tile2, pos1.gx, pos1.gy);
-        tile2.moveTo(pos1, { time: 250 });
+        if (tile2.color) {
+            self.setTile(tile2, pos1.gx, pos1.gy);
+            tile2.moveTo(pos1, { time: 250 });
+        } else {
+            self.setTile(null, pos1.gx, pos1.gy);
+        }
 
 
 
 
 
         self.wait(tile1.elm, 260, function () {
-            tile1.moving = false;
-            tile2.moving = false;
-
             self.checkAllMatches();
             self.destroyMatchingTiles();
 
