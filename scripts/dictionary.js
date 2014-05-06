@@ -162,19 +162,23 @@ var Kanjidic = function () {
         result.literal = entry.literal;
 
         // english meanings
-        result.meanings = [];
+        //result.meanings = [];
+        result.readings = { all: [], eng: [], jap: [], onyomi: [], kunyomi: [] };
+
         for (i = 0, len = entry.meanings.length; i < len; i += 1) {
             item = entry.meanings[i];
             if (item.hasOwnProperty("m_lang")) { break; }
-            result.meanings.push(item.meaning);
+            result.readings.eng.push(item.meaning);
+            result.readings.all.push(item.meaning);
         }
 
         // readings: all, on, kun
-        result.readings = { all: [], onyomi: [], kunyomi: [] };
+
         for (i = 0, len = entry.readings.length; i < len; i += 1) {
             item = entry.readings[i];
 
             if (item.r_type === "ja_on" || item.r_type === "ja_kun") {
+                result.readings.jap.push(item.reading);
                 result.readings.all.push(item.reading);
             }
 

@@ -21,7 +21,9 @@ var Tileboard = function (container, width, height) {
 
     this.init = function () {
         // create empty tiles
-        self.createTiles();
+        this.createTiles();
+
+        //this.createTileBubbles();
 
         // initialize tileboard at chapter 1 of category jlpt4
         var category = kanjidic.filterByCategory(4, 'jlpt', 'freq');
@@ -29,6 +31,8 @@ var Tileboard = function (container, width, height) {
 
         // initialize tiles with chapter data
         this.initTiles();
+
+
 
         // display tileboard
         tweener.tween(this.elm,
@@ -50,13 +54,24 @@ var Tileboard = function (container, width, height) {
     };
 
 
+    /*this.createTileBubbles = function () {
+        for (var y = 0; y < this.height; y++) {
+            for (var x = 0; x < this.width; x++) {
+                var tile = this.tiles[y][x];
+                tile.bubble = domutils.appendChild('div', document.body, 'bubble');
+                tile.bubble.style.display = 'none';
+            }
+        }
+    };*/
+
+
 	// initialize chapter
 
 	this.initChapter = function (category, chapterNum) {
 		// set chapter vars
 		this.chapter = {
 			kanjis:[],
-            colors: ['white', 'orange', 'pink', 'blue'] //, 'gray'
+            colors: ['white', 'orange', 'pink', 'cyan'] //, 'gray'
 		};
 
 		// get kanjis on current chapter num
@@ -82,6 +97,7 @@ var Tileboard = function (container, width, height) {
         for (var y = 0; y < this.height; y++) {
             for (var x = 0; x < this.width; x++) {
                 var tile = this.getTile(x, y);
+
                 // make sure that new tiles never match when initialized
                 tile.matches = { x: 3, y: 3, all: 3 };
 
@@ -103,6 +119,8 @@ var Tileboard = function (container, width, height) {
                         this.checkAllMatches();
                     }
                 }
+
+                console.log(tile.data);
 
             }
         }
@@ -177,7 +195,7 @@ var Tileboard = function (container, width, height) {
         self.setTile(tile2, pos1.gx, pos1.gy);
         tile2.moveTo(pos1, { time: 250 });
 
-        self.wait(tile1.elm, 250, function () {
+        self.wait(tile1.elm, 260, function () {
             self.checkAllMatches();
             self.destroyMatchingTiles();
         });
@@ -205,7 +223,7 @@ var Tileboard = function (container, width, height) {
             var target = self.getTile(x, y);
 
             // escape if no target or target is of different color
-            if (!target || target.color !== tile.color) { return; }
+            if (!target || target.color === null || target.color !== tile.color) { return; }
 
             // escape if target is already visited
             for (var i = 0; i < tile.visited.length; i++) {
@@ -233,7 +251,7 @@ var Tileboard = function (container, width, height) {
         for (var y = 0; y < this.height; y++) {
             for (var x = 0; x < this.width; x++) {
                 var tile = this.getTile(x, y);
-                if (tile) {
+                if (tile && tile.color) {
                     tile.matches = tile.matches || {};
                     tile.matches[dir] = 0;
                     tile.visited = [];
@@ -258,7 +276,6 @@ var Tileboard = function (container, width, height) {
                         tile.destroy(125);
                     }
                 }
-
             }
         }
 
@@ -273,12 +290,12 @@ var Tileboard = function (container, width, height) {
         for (var x = 0; x < this.width; x++) {
             for (var y = this.height - 1; y >= 0; y--) {
                 var tile = this.getTile(x, y);
-                if (!tile) { continue; }
+                if (!tile || tile.color === null) { continue; }
 
                 var spaces = 0;
                 for (var i = tile.y + 1; i < self.height; i++) {
                     var tile2 = this.getTile(tile.x, i);
-                    if (tile2) { break; }
+                    if (tile2 && tile.color) { break; }
                     spaces++;
                 }
 
@@ -305,7 +322,7 @@ var Tileboard = function (container, width, height) {
         for (var x = 0; x < this.width; x++) {
             for (var y = 0; y < this.height; y++) {
                 tile = this.getTile(x, y);
-                if (!tile) {
+                if (!tile || tile.color === null) {
                     tile = this.setTile(new Tile(this, x, y), x, y);
                     var num = utils.randomInt(0, this.chapter.colors.length - 1);
                     tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
