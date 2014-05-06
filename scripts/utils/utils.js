@@ -36,6 +36,24 @@ var Utils = function () {
 				return rint;
 		}
 	};
+
+
+    /*this.mergeArr = function(arr1, arr2) {
+        var arr3 = [];
+        for (var i in arr1) {
+            var shared = false;
+            for (var j in arr2) {
+                if (arr2[j].name === arr1[i].name) {
+                    shared = true;
+                    break;
+                }
+            }
+            if(!shared) { arr3.push(arr1[i]); }
+        }
+        arr3 = arr3.concat(arr2);
+        return arr3;
+    };*/
+
 };
 
 var utils = new Utils();

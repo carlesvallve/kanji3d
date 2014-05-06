@@ -85,7 +85,7 @@ div {
 .button {
     text-align: center;
     font-weight: bold;
-    font-size: 13px; //26px;
+    font-size: 16px;
     line-height: 36px;
     text-decoration: none;
     text-shadow: rgba(255,255,255,1) 0 1px 0;
@@ -95,6 +95,10 @@ div {
     /*border-bottom: 1px solid rgba(0,0,0,0.1);*/
 
     background-image: -webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from( rgba(255,255,255,0) ), to( rgba(255,255,255,0.7) )), url(assets/textures/buttons/noise.png);
+
+    /*background-image: url(assets/textures/buttons/noise.png);
+    background-size: 50% 50%;*/
+
 
     color: hsl(0, 0%, 40%) !important;
     background-color: hsl(0, 0%, 75%);
@@ -138,6 +142,16 @@ div {
     border-bottom: 3px solid hsl(208, 50%, 50%);
     /*
     box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(208, 50%, 55%) 0 .1em 3px, hsl(208, 50%, 40%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
+    */
+}
+
+
+.button.gray {
+    color: #333 !important; //hsl(340, 100%, 10%) !important;
+    background-color: #777; //hsl(340, 100%, 30%);
+    border-bottom: #333 3px solid; //hsl(340, 70%, 50%);
+    /*
+    box-shadow: inset rgba(255,254,255,0.6) 0 0.3em .3em, inset rgba(0,0,0,0.15) 0 -0.1em .3em, *//* inner shadow *//* hsl(340, 70%, 50%) 0 .1em 3px, hsl(340, 80%, 40%) 0 .3em 1px, *//* color border *//* rgba(0,0,0,0.2) 0 .5em 5px;
     */
 }
 

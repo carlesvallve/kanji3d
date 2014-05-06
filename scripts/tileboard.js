@@ -53,7 +53,7 @@ var Tileboard = function (container, width, height) {
 		// set chapter vars
 		this.chapter = {
 			kanjis:[],
-            colors: ['white', 'orange', 'pink', 'blue']
+            colors: ['white', 'orange', 'pink', 'blue'] //, 'gray'
 		};
 
 		// get kanjis on current chapter num
@@ -73,12 +73,27 @@ var Tileboard = function (container, width, height) {
 			for (var x = 0; x < this.width; x++) {
                 var tile = this.getTile(x, y);
                 // make sure that new tiles never match when initialized
-                tile.matches = 3;
-                while (tile.matches >= 3) {
-                    var num = utils.randomInt(0, max - 1);
-                    tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
-                    this.checkMatches();
+                tile.matches = { x: 3, y: 3, all: 3 };
+                var num;
+                if (window.matchingMode === 'line') {
+                    while (tile.matches.x >= 3) {
+                        num = utils.randomInt(0, max - 1);
+                        tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
+                        this.checkAllMatches();
+                    }
+                    while (tile.matches.y >= 3) {
+                        num = utils.randomInt(0, max - 1);
+                        tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
+                        this.checkAllMatches();
+                    }
+                } else {
+                    while (tile.matches.all >= 3) {
+                        num = utils.randomInt(0, max - 1);
+                        tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
+                        this.checkAllMatches();
+                    }
                 }
+
 			}
 		}
 	};
@@ -146,17 +161,15 @@ var Tileboard = function (container, width, height) {
 
         // move tile1 to pos2
         self.setTile(tile1, pos2.gx, pos2.gy);
-        tile1.moveTo(pos2, 250);
+        tile1.moveTo(pos2, { time: 250 });
 
         // move tile2 to pos1
         self.setTile(tile2, pos1.gx, pos1.gy);
-        tile2.moveTo(pos1, 250);
+        tile2.moveTo(pos1, { time: 250 });
 
-        self.wait(350, function () {
-            var totalMatches = self.checkMatches();
-            if (totalMatches > 0) {
-                self.destroyMatchingTiles();
-            }
+        self.wait(tile1.elm, 250, function () {
+            self.checkAllMatches();
+            self.destroyMatchingTiles();
         });
 	};
 
@@ -165,10 +178,18 @@ var Tileboard = function (container, width, height) {
 
     // check for tileboard matches
 
-    this.checkMatches = function () {
-        var totalMatches = 0;
+    this.checkAllMatches = function () {
+        if (window.matchingMode === 'line') {
+            self.checkMatches('x');
+            self.checkMatches('y');
+        } else {
+            self.checkMatches('all');
+        }
+    };
 
-        function floodFill(tile, x, y) {
+    this.checkMatches = function (dir) { // x, y, all
+
+        function floodFill(tile, x, y, dir) {
             // get new tile
             var target = self.getTile(x, y);
 
@@ -181,47 +202,57 @@ var Tileboard = function (container, width, height) {
             }
 
             // add +1 to matches
-            tile.matches += 1;
-            totalMatches++;
+            tile.matches[dir] += 1;
 
             // add target tile to visited array
             tile.visited.push(target);
 
             // recurse to next target in 4 directions
-            if (x > 0) { floodFill(tile, x - 1, y); }
-            if (y > 0){ floodFill(tile, x, y - 1); }
-            if (x < self.width - 1) { floodFill(tile, x + 1, y); }
-            if (y < self.height - 1) { floodFill(tile, x, y + 1); }
+            if (dir === 'x' || dir === 'all') {
+                if (x > 0) { floodFill(tile, x - 1, y, dir); }
+                if (x < self.width - 1) { floodFill(tile, x + 1, y, dir); }
+            }
+
+            if (dir === 'y' || dir === 'all') {
+                if (y > 0) { floodFill(tile, x, y - 1, dir); }
+                if (y < self.height - 1) { floodFill(tile, x, y + 1, dir); }
+            }
         }
 
         for (var y = 0; y < this.height; y++) {
             for (var x = 0; x < this.width; x++) {
                 var tile = this.getTile(x, y);
                 if (tile) {
-                    tile.matches = 0;
+                    tile.matches = tile.matches || {};
+                    tile.matches[dir] = 0;
                     tile.visited = [];
-                    floodFill(tile, tile.x, tile.y);
+                    floodFill(tile, tile.x, tile.y, dir);
                 }
             }
         }
-
-        return totalMatches;
     };
 
 
     this.destroyMatchingTiles = function() {
         // destroy all matching tiles
-        for (var x = 0; x < this.width; x++) {
-            for (var y = 0; y < this.height; y++) {
-                var tile = this.getTile(x, y);
-                if (tile && tile.matches >= 3) {
-                    tile.destroy(250);
+        for (var x = 0; x < self.width; x++) {
+            for (var y = 0; y < self.height; y++) {
+                var tile = self.getTile(x, y);
+                if (window.matchingMode === 'line') {
+                    if (tile.matches.x >= 3 || tile.matches.y >= 3) {
+                        tile.destroy(125);
+                    }
+                } else {
+                    if (tile.matches.all >= 3) {
+                        tile.destroy(125);
+                    }
                 }
+
             }
         }
 
         // aply gravity on upper tiles
-        this.wait(250, function () {
+        this.wait(this.board, 125, function () {
             self.applyGravity();
         });
     };
@@ -244,58 +275,62 @@ var Tileboard = function (container, width, height) {
                     var yy = tile.y + spaces;
                     this.setTile(null, tile.x, tile.y);
                     this.setTile(tile, tile.x, yy);
-                    tile.moveTo({ x: tile.pos.x, y: yy * this.tileSize}, 250);
+
+                    var delay = (4 - tile.y) * 50;
+                    tile.moveTo({ x: tile.pos.x, y: yy * this.tileSize}, { time: 125, delay: delay, easing: 'ease-in' });
                 }
             }
         }
 
         // repopulate tileboard
-        //window.setTimeout(function () {
-            self.repopulate();
-        //}, 0);
-
-        /*this.wait(100, function () {
-            self.repopulate();
-        });*/
-
-        // wait for repopulation, then re-check for new tile matches
-        /*this.wait(2000, function () {
-            var totalMatches = self.checkMatches();
-            if (totalMatches > 0) {
-                self.destroyMatchingTiles();
-            }
-        });*/
+        self.repopulate();
     };
 
 
     this.repopulate = function () {
+        var tile;
+        var newtiles = [];
 
         for (var x = 0; x < this.width; x++) {
             for (var y = 0; y < this.height; y++) {
-                var tile = this.getTile(x, y);
+                tile = this.getTile(x, y);
                 if (!tile) {
                     tile = this.setTile(new Tile(this, x, y), x, y);
-
                     var num = utils.randomInt(0, this.chapter.colors.length - 1);
                     tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
-
-                    tile.elm.style.webkitTransform = 'translate(' + tile.pos.x + 'px, ' + ((tile.y - 4) * this.tileSize) + 'px)';
-                    //tile.elm.style.opacity = 0;
-
-                    var delay = (5 - tile.y) * 50;
-                    tile.moveTo(tile.pos, 250, delay);
-                    //tweener.tween(tile.elm, { opacity: 1 }, { time: 250, delay: delay });
+                    newtiles.push(tile);
                 }
             }
+        }
+
+        function moveTile(num, tile) {
+            self.wait(tile, 50, function () {
+                var delay = (4 - tile.y) * 50;
+                tile.moveTo(tile.pos, { time: 250, delay: delay }, function () {
+                    // once the last tile has fallen
+                    if (num === newtiles.length - 1) {
+                        // check for new tile matches
+                        self.wait(self.elm, 125, function () {
+                            self.checkAllMatches();
+                            self.destroyMatchingTiles();
+                        });
+                    }
+                });
+            });
+        }
+
+        for (var i = 0; i < newtiles.length; i++) {
+            tile = newtiles[i];
+            tile.elm.style.opacity = 1;
+            tile.elm.style.webkitTransform = 'translate(' + tile.pos.x + 'px, ' + ((tile.y - 6) * this.tileSize) + 'px)';
+            moveTile(i, newtiles[i]);
         }
     };
 
 
-    this.wait = function (time, cb) {
+    this.wait = function (elm, time, cb) {
         tweener.tween(this.elm, {}, { time: time, delay: 0 }, function () {
-            //window.setTimeout(function () {
-                cb();
-           // }, 0);
+            cb();
         });
     };
 

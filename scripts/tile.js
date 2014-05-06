@@ -40,13 +40,19 @@ var Tile = function (tileboard, x, y) {
     };
 
 
-    this.moveTo = function (pos, time, delay, cb) {
+    this.moveTo = function (pos, options, cb) {
         this.moving = true;
+
+        options = {
+            time: options.time || 250,
+            delay: options.delay || 0,
+            easing: options.easing || window.easing
+        };
 
         // move tile to new pos
         tweener.tween(this.elm,
             { webkitTransform: 'translate(' + pos.x + 'px, ' + pos.y + 'px)', zIndex: pos.y },
-            { time: time, delay: delay || 0, easing: window.easing },
+            { time: options.time, delay: options.delay || 0, easing: options.easing },
             function () {
                 self.moving = false;
                 if (cb) { cb(); }
@@ -60,7 +66,7 @@ var Tile = function (tileboard, x, y) {
 
         tweener.tween(this.elm,
             { webkitTransform: 'translate(' + this.pos.x + 'px, ' + this.pos.y + 'px) scale(0.01)', opacity: 0 },
-            { time: time, delay: 0, easing: window.easing },
+            { time: time, delay: 0, easing: 'ease-in' },
             function () {
                 self.elm.style.display = 'none';
             }
