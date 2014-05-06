@@ -3,6 +3,7 @@ console.log('Welcome to kanji-3D');
 var kanjidic;
 var easing = 'cubic-bezier(0.455, 0.03, 0.515, 0.955)';
 var matchingMode = 'line'; // line, fill
+var app;
 
 
 var App = function () {
@@ -46,7 +47,7 @@ window.onload = function() {
     domutils.disableScroll();
 
     // init application
-    var app = new App();
+    app = new App();
 
     // load kanji dictionary
     app.loadDictionary();

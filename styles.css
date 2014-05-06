@@ -155,16 +155,50 @@ div {
     */
 }
 
+.buttonLabel {
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 36px;
+    text-decoration: none;
+    text-shadow: rgba(255,255,255,1) 0 1px 0;
+
+    text-overflow: 'string';
+}
+
+.buttonLabel.white {
+    color: hsl(0, 0%, 40%) !important;
+}
+
+.buttonLabel.orange {
+    color: hsl(39, 100%, 30%) !important;
+}
+
+.buttonLabel.pink {
+    color: hsl(340, 100%, 30%) !important;
+}
+
+.buttonLabel.cyan {
+    color: hsl(208, 50%, 40%) !important;
+}
+
+.buttonLabel.gray {
+    color: #333 !important;
+}
+
 
 .bubble {
     position: absolute;
+    background-color: #000;
+    border: 1px solid #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    opacity: 0.5;
 }
 
-.bubbleLabel {
-    //background-color: #000;
-    //border-radius: 10px;
-    //padding: 4px 4px;
 
+.bubbleLabel {
     text-align: center;
     font-weight: bold;
     font-size: 11px;

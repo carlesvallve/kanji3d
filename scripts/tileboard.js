@@ -71,7 +71,8 @@ var Tileboard = function (container, width, height) {
 		// set chapter vars
 		this.chapter = {
 			kanjis:[],
-            colors: ['white', 'orange', 'pink', 'cyan'] //, 'gray'
+            colors: ['white', 'orange', 'pink', 'cyan'], //, 'gray'
+            counter: [0, 0, 0, 0]
 		};
 
 		// get kanjis on current chapter num
@@ -93,6 +94,13 @@ var Tileboard = function (container, width, height) {
     this.initTiles = function () {
         var num, max = this.chapter.colors.length;
 
+        function setRandomTile(tile) {
+            num = utils.randomInt(0, max - 1);
+                self.chapter.counter[num] += 1;
+                tile.init(x, y, self.chapter.colors[num], self.chapter.kanjis[num]);
+                self.checkAllMatches();
+        }
+
         // initialize current chapter tiles
         for (var y = 0; y < this.height; y++) {
             for (var x = 0; x < this.width; x++) {
@@ -103,25 +111,16 @@ var Tileboard = function (container, width, height) {
 
                 if (window.matchingMode === 'line') {
                     while (tile.matches.x >= 3) {
-                        num = utils.randomInt(0, max - 1);
-                        tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
-                        this.checkAllMatches();
+                        setRandomTile(tile);
                     }
                     while (tile.matches.y >= 3) {
-                        num = utils.randomInt(0, max - 1);
-                        tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
-                        this.checkAllMatches();
+                        setRandomTile(tile);
                     }
                 } else {
                     while (tile.matches.all >= 3) {
-                        num = utils.randomInt(0, max - 1);
-                        tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
-                        this.checkAllMatches();
+                        setRandomTile(tile);
                     }
                 }
-
-                console.log(tile.data);
-
             }
         }
     };
@@ -179,6 +178,7 @@ var Tileboard = function (container, width, height) {
         var tile2 = self.getTileAtPos( { x: pos.x + dir.x * self.tileSize, y: pos.y + dir.y * self.tileSize });
 
         if (!tile1 || !tile2) { return; }
+        if (!tile1.color || !tile2.color) { return; }
         if (tile1.moving || tile2.moving) { return; }
 
         // get both positions
@@ -263,26 +263,114 @@ var Tileboard = function (container, width, height) {
 
 
     this.destroyMatchingTiles = function() {
+
         // destroy all matching tiles
         for (var x = 0; x < self.width; x++) {
             for (var y = 0; y < self.height; y++) {
                 var tile = self.getTile(x, y);
                 if (window.matchingMode === 'line') {
-                    if (tile.matches.x >= 3 || tile.matches.y >= 3) {
+                    if (tile.color && tile.matches.x >= 3 || tile.matches.y >= 3) {
                         tile.destroy(125);
                     }
                 } else {
-                    if (tile.matches.all >= 3) {
+                    if (tile.color && tile.matches.all >= 3) {
                         tile.destroy(125);
                     }
                 }
             }
         }
 
+        // generate word rects over matching kanjis
+        this.generateWordRects();
+
         // aply gravity on upper tiles
-        this.wait(this.board, 125, function () {
+        /*this.wait(this.board, 125, function () {
             self.applyGravity();
-        });
+        });*/
+    };
+
+
+    this.generateWordRects = function () {
+        var rects = [];
+
+        var x, y, tile, rect;
+
+        // check horizontal rects
+        for (y = 0; y < self.height; y++) {
+            rect = null;
+            for (x = 0; x < self.width; x++) {
+                tile = this.getTile(x, y);
+                if (tile.matches.x < 3) { rect = null; }
+                if (tile.matches.x >= 3 && !tile.rected) {
+                    if (rect) {
+                        rect.width += this.tileSize - 1;
+                    } else {
+                        rect = {
+                            x: tile.pos.x, y: this.tileSize * y,
+                            width: this.tileSize - 2, height: this.tileSize - 7,
+                            color: tile.originalColor,
+                            data: tile.data,
+                            direction: 'horizontal'
+                        };
+                        rects.push(rect);
+                    }
+                    tile.rected = true;
+                }
+            }
+        }
+
+        // check vertical rects
+        for (x = 0; x < self.width; x++) {
+            rect = null;
+            for (y = 0; y < self.height; y++) {
+                tile = this.getTile(x, y);
+                if (tile.matches.y < 3) { rect = null; }
+                if (tile.matches.y >= 3 && !tile.rected) {
+                    if (rect) {
+                        rect.height += this.tileSize - 1;
+                    } else {
+                        rect = {
+                            x: this.tileSize * x, y: tile.pos.y,
+                            width: this.tileSize - 4, height: this.tileSize - 5,
+                            color: tile.originalColor,
+                            data: tile.data,
+                            direction: 'vertical'
+                        };
+                        rects.push(rect);
+                    }
+                    tile.rected = true;
+                }
+            }
+        }
+
+        // create rect blocks
+        for (var i = 0; i < rects.length; i ++) {
+            rect = rects[i];
+            if (rect.width > 0) {
+                var bubble = domutils.appendChild('div', this.board, 'tile button ' + rect.color);
+                bubble.label = domutils.appendChild('div', bubble, 'tileLabel ' + rect.color);
+
+                bubble.style.left = rect.x + 'px';
+                bubble.style.top = rect.y + 'px';
+                bubble.style.width = rect.width + 'px';
+                bubble.style.height = rect.height + 'px';
+                bubble.style.visibility = 'visible';
+                bubble.style.zIndex = 1000;
+
+                bubble.label.style.fontSize = '13px';
+
+                if (rect.direction === 'vertical') {
+                    bubble.label.style.wordBreak = 'break-all';
+                    bubble.label.style.lineHeight = '16px';
+                    bubble.label.style.width = '10px';
+                    bubble.label.style.marginLeft = '14px';
+                    bubble.label.style.marginTop = '8px';
+                }
+
+                var reading = utils.randomArr(rect.data.readings.all);
+                domutils.setText(bubble.label, reading);
+            }
+        }
     };
 
 
