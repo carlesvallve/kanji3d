@@ -9,6 +9,9 @@ var Tile = function (tileboard, x, y) {
     this.elm = domutils.appendChild('div', tileboard.board, 'tile');
     this.label = domutils.appendChild('div', this.elm, 'tileLabel');
 
+    this.wordElm = domutils.appendChild('div', tileboard.board, 'tile button');
+    this.wordElm.label = domutils.appendChild('div', this.wordElm, 'tileLabel');
+
     //this.info = domutils.appendChild('div', this.elm, 'info', '?');
     /*this.bubble = domutils.appendChild('div', document.body, 'bubble');
     this.bubble.label = domutils.appendChild('div', this.bubble, 'bubbleLabel');
@@ -43,6 +46,9 @@ var Tile = function (tileboard, x, y) {
         this.elm.style.webkitTransform = 'translate(' + this.pos.x + 'px, ' + this.pos.y + 'px)';
         this.elm.style.zIndex = this.pos.y;
 
+        this.wordElm.className = 'tile button ' + color;
+        this.wordElm.label.className = 'tileLabel ' + color;
+
         //this.bubble.style.webkitTransform = 'translate(' + (this.pos.x + 8) + 'px, ' + (this.pos.y + 148) + 'px)';
     };
 
@@ -72,6 +78,7 @@ var Tile = function (tileboard, x, y) {
         //tileboard.setTile(null, self.x, self.y);
         this.originalColor = this.color;
         this.color = null;
+        this.rected = null;
 
         tweener.tween(this.elm,
             { webkitTransform: 'translate(' + this.pos.x + 'px, ' + this.pos.y + 'px) scale(0.01)', opacity: 0 },

@@ -7,7 +7,9 @@ var touchend = canTouch ? 'touchend' : 'mouseup';
 var touchcancel = canTouch ? 'touchcancel' : false;
 
 
-function swipedetect(touchsurface, callback) {
+function swipedetect(touchsurface) {
+
+        var mouseIsDown = false;
 
 		var swipedir,
 		startX,
@@ -20,8 +22,9 @@ function swipedetect(touchsurface, callback) {
 		restraint = 320, // maximum distance allowed at the same time in perpendicular direction
 		allowedTime = 1000, // maximum time allowed to travel that distance
 		elapsedTime,
-		startTime,
-		handleSwipe = callback || function(point, swipedir) {};
+		startTime;
+
+		//handleSwipe = callback || function(point, swipedir) {};
 
 
     // get the touchsurface relative offset on the page
@@ -48,6 +51,8 @@ function swipedetect(touchsurface, callback) {
 
         //alert('touch start!');
 
+        mouseIsDown = true;
+
 		swipedir = null;
 		startX = touchobj.pageX - offset.left;
 		startY = touchobj.pageY - offset.top;
@@ -61,6 +66,7 @@ function swipedetect(touchsurface, callback) {
 
 	touchsurface.addEventListener(touchmove, function(e) {
         if (swipedir) { return; }
+        if (!mouseIsDown) { return; }
 
 		var touchobj = canTouch ? e.changedTouches[0] : e;
 
@@ -82,7 +88,15 @@ function swipedetect(touchsurface, callback) {
 			}
 		}
 
-		handleSwipe({ x: startX, y: startY }, swipedir);
+		//handleSwipe({ x: startX, y: startY }, swipedir);
+
+        // create and dispatch the event
+        if (swipedir) {
+            var event = new CustomEvent('customSwipe', { detail: { pos: { x: startX, y: startY }, dir: swipedir } });
+            touchsurface.dispatchEvent(event);
+        }
+
+
 		e.preventDefault();
 	}, false);
 
@@ -90,6 +104,14 @@ function swipedetect(touchsurface, callback) {
     // touch end
 
     touchsurface.addEventListener(touchend, function(e) {
+        mouseIsDown = false;
+
+        // create and dispatch the event
+        if (!swipedir) {
+            var event = new CustomEvent('customClick', { detail: { pos: { x: startX, y: startY } } });
+            touchsurface.dispatchEvent(event);
+        }
+
         e.preventDefault(); // prevent scrolling when inside DIV
     }, false);
 }

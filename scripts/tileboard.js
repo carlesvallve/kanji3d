@@ -86,6 +86,8 @@ var Tileboard = function (container, width, height) {
             str +=' ' + category[i].literal;
 		}
         console.log('chapter' + chapterNum + ':' + str);
+
+        this.words = [];
 	};
 
 
@@ -178,7 +180,7 @@ var Tileboard = function (container, width, height) {
         var tile2 = self.getTileAtPos( { x: pos.x + dir.x * self.tileSize, y: pos.y + dir.y * self.tileSize });
 
         if (!tile1 || !tile2) { return; }
-        if (!tile1.color || !tile2.color) { return; }
+        if (tile1.rected || tile2.rected) { return; }
         if (tile1.moving || tile2.moving) { return; }
 
         // get both positions
@@ -195,13 +197,41 @@ var Tileboard = function (container, width, height) {
         self.setTile(tile2, pos1.gx, pos1.gy);
         tile2.moveTo(pos1, { time: 250 });
 
+
+
+
+
         self.wait(tile1.elm, 260, function () {
+            tile1.moving = false;
+            tile2.moving = false;
+
             self.checkAllMatches();
             self.destroyMatchingTiles();
+
+            // aply gravity on upper tiles
+            self.wait(document.body, 50, function () {
+                self.applyGravity();
+
+                // repopulate tileboard
+                self.repopulate();
+            });
         });
+
+
 	};
 
-	swipedetect(this.board, this.swipeTiles);
+
+    // Initialize mouse/touch events
+
+	swipedetect(this.board);
+
+    this.board.addEventListener("customSwipe", function(e) {
+        self.swipeTiles(e.detail.pos, e.detail.dir);
+    });
+
+    this.board.addEventListener("customClick", function(e) {
+        self.checkForRectClicks(e.detail.pos);
+    });
 
 
     // check for tileboard matches
@@ -269,11 +299,11 @@ var Tileboard = function (container, width, height) {
             for (var y = 0; y < self.height; y++) {
                 var tile = self.getTile(x, y);
                 if (window.matchingMode === 'line') {
-                    if (tile.color && tile.matches.x >= 3 || tile.matches.y >= 3) {
+                    if (tile && tile.color && (tile.matches.x >= 3 || tile.matches.y >= 3)) {
                         tile.destroy(125);
                     }
                 } else {
-                    if (tile.color && tile.matches.all >= 3) {
+                    if (tile && tile.color && tile.matches.all >= 3) {
                         tile.destroy(125);
                     }
                 }
@@ -282,11 +312,41 @@ var Tileboard = function (container, width, height) {
 
         // generate word rects over matching kanjis
         this.generateWordRects();
+    };
 
-        // aply gravity on upper tiles
-        /*this.wait(this.board, 125, function () {
-            self.applyGravity();
-        });*/
+
+    this.checkForRectClicks = function (pos) {
+
+        function applyGravity() {
+            // aply gravity on upper tiles
+            self.wait(document.body, 100, function () {
+                self.applyGravity();
+
+                // repopulate tileboard
+                self.repopulate();
+            });
+        }
+
+        for (var i =0; i < self.words.length; i++) {
+            var rect = self.words[i].rect;
+
+            if (pos.x >= rect.x && pos.y >= rect.y && pos.x <= rect.x + rect.width && pos.y <= rect.y + rect.height) {
+
+                for (var n =0; n < rect.tiles.length; n++) {
+                    var tile = rect.tiles[n];
+                    //self.setTile(null, tile.x, tile.y);
+                    self.tiles[tile.y][tile.x].color = null;
+                    self.tiles[tile.y][tile.x].rected = false;
+                    tile.destroyed = true;
+                }
+
+                self.words[i].elm.style.visibility = 'hidden';
+                self.words.splice(i, 1);
+
+                applyGravity();
+                return;
+            }
+        }
     };
 
 
@@ -300,17 +360,20 @@ var Tileboard = function (container, width, height) {
             rect = null;
             for (x = 0; x < self.width; x++) {
                 tile = this.getTile(x, y);
+                if (!tile || tile.destroyed) { continue; }
                 if (tile.matches.x < 3) { rect = null; }
                 if (tile.matches.x >= 3 && !tile.rected) {
                     if (rect) {
                         rect.width += this.tileSize - 1;
+                        rect.tiles.push(tile);
                     } else {
                         rect = {
                             x: tile.pos.x, y: this.tileSize * y,
                             width: this.tileSize - 2, height: this.tileSize - 7,
                             color: tile.originalColor,
                             data: tile.data,
-                            direction: 'horizontal'
+                            direction: 'horizontal',
+                            tiles: [tile]
                         };
                         rects.push(rect);
                     }
@@ -324,17 +387,20 @@ var Tileboard = function (container, width, height) {
             rect = null;
             for (y = 0; y < self.height; y++) {
                 tile = this.getTile(x, y);
+                if (!tile || tile.destroyed) { continue; }
                 if (tile.matches.y < 3) { rect = null; }
                 if (tile.matches.y >= 3 && !tile.rected) {
                     if (rect) {
                         rect.height += this.tileSize - 1;
+                        rect.tiles.push(tile);
                     } else {
                         rect = {
                             x: this.tileSize * x, y: tile.pos.y,
                             width: this.tileSize - 4, height: this.tileSize - 5,
                             color: tile.originalColor,
                             data: tile.data,
-                            direction: 'vertical'
+                            direction: 'vertical',
+                            tiles: [tile]
                         };
                         rects.push(rect);
                     }
@@ -344,62 +410,109 @@ var Tileboard = function (container, width, height) {
         }
 
         // create rect blocks
+
         for (var i = 0; i < rects.length; i ++) {
             rect = rects[i];
             if (rect.width > 0) {
-                var bubble = domutils.appendChild('div', this.board, 'tile button ' + rect.color);
-                bubble.label = domutils.appendChild('div', bubble, 'tileLabel ' + rect.color);
+                var word = {};
+                word.rect = rect;
+                this.words.push(word);
 
-                bubble.style.left = rect.x + 'px';
-                bubble.style.top = rect.y + 'px';
-                bubble.style.width = rect.width + 'px';
-                bubble.style.height = rect.height + 'px';
-                bubble.style.visibility = 'visible';
-                bubble.style.zIndex = 1000;
+                word.elm = rect.tiles[0].wordElm;
 
-                bubble.label.style.fontSize = '13px';
+                word.elm.style.visibility = 'visible';
+                word.elm.style.webkitTransform = 'translate(' + rect.x + 'px, ' + rect.y + 'px)';
+                word.elm.style.width = rect.width + 'px';
+                word.elm.style.height = rect.height + 'px';
+                word.elm.style.visibility = 'visible';
+                word.elm.style.zIndex = 1000;
+
+                word.elm.label.style.fontSize = '13px';
 
                 if (rect.direction === 'vertical') {
-                    bubble.label.style.wordBreak = 'break-all';
-                    bubble.label.style.lineHeight = '16px';
-                    bubble.label.style.width = '10px';
-                    bubble.label.style.marginLeft = '14px';
-                    bubble.label.style.marginTop = '8px';
+                    word.elm.label.style.wordBreak = 'break-all';
+                    word.elm.label.style.lineHeight = '16px';
+                    word.elm.label.style.width = '10px';
+                    word.elm.label.style.marginLeft = '14px';
+                    word.elm.label.style.marginTop = '8px';
                 }
 
                 var reading = utils.randomArr(rect.data.readings.all);
-                domutils.setText(bubble.label, reading);
+                domutils.setText(word.elm.label, reading);
             }
         }
     };
 
 
-    this.applyGravity = function () {
+    /*this.applyGravity = function () {
         for (var x = 0; x < this.width; x++) {
             for (var y = this.height - 1; y >= 0; y--) {
                 var tile = this.getTile(x, y);
-                if (!tile || tile.color === null) { continue; }
+
+                //if (!tile) { break; }
+                //if (tile.color) { break; }
+                //if (tile.rected) { break; }
+
+                //if (tile || !tile.color) { break; }
+
+                //if (!tile || !tile.color) { continue; }
+                //if (!tile || (!tile.color || tile.rected)) { continue; }
 
                 var spaces = 0;
                 for (var i = tile.y + 1; i < self.height; i++) {
                     var tile2 = this.getTile(tile.x, i);
-                    if (tile2 && tile.color) { break; }
+                    if (!tile2) { break; }
+                    if (tile2.color) { break; }
+                    if (tile2.rected) { break; }
+                    //if (tile2 && tile2.color) { break; }
+                    //if (tile2 && tile2.color && !tile.rected) { break; }
+                    spaces++;
+                }
+
+                if (spaces > 0) {
+                    var yy = tile.y + spaces;
+                    //this.setTile(null, tile.x, tile.y);
+
+                    this.setTile(tile, tile.x, yy);
+                    this.tiles[tile.y][tile.x].color = null;
+                    this.tiles[tile.y][tile.x].rected = false;
+
+                    var delay = (4 - tile.y) * 50;
+                    tile.moveTo({ x: tile.pos.x, y: yy * this.tileSize}, { time: 250, delay: delay });
+                }
+            }
+        }
+
+    };*/
+
+    this.applyGravity = function () {
+        for (var x = 0; x < this.width; x++) {
+            for (var y = this.height - 1; y >= 0; y--) {
+                var tile = this.getTile(x, y);
+                if (tile && tile.rected) { break; }
+
+                if (!tile || (!tile.color || tile.rected)) { continue; }
+
+                var spaces = 0;
+                for (var i = tile.y + 1; i < self.height; i++) {
+                    var tile2 = this.getTile(tile.x, i);
+                    if (tile2 && tile2.color && !tile.rected) { break; }
                     spaces++;
                 }
 
                 if (spaces > 0) {
                     var yy = tile.y + spaces;
                     this.setTile(null, tile.x, tile.y);
+
                     this.setTile(tile, tile.x, yy);
+                    //this.tiles[tile.y][tile.x].color = null;
 
                     var delay = (4 - tile.y) * 50;
-                    tile.moveTo({ x: tile.pos.x, y: yy * this.tileSize}, { time: 125, delay: delay, easing: 'ease-in' });
+                    tile.moveTo({ x: tile.pos.x, y: yy * this.tileSize}, { time: 250, delay: delay });
                 }
             }
         }
 
-        // repopulate tileboard
-        self.repopulate();
     };
 
 
@@ -410,7 +523,9 @@ var Tileboard = function (container, width, height) {
         for (var x = 0; x < this.width; x++) {
             for (var y = 0; y < this.height; y++) {
                 tile = this.getTile(x, y);
-                if (!tile || tile.color === null) {
+                if (tile && tile.rected) { break; }
+
+                if (!tile || !tile.color) {
                     tile = this.setTile(new Tile(this, x, y), x, y);
                     var num = utils.randomInt(0, this.chapter.colors.length - 1);
                     tile.init(x, y, this.chapter.colors[num], this.chapter.kanjis[num]);
@@ -426,7 +541,7 @@ var Tileboard = function (container, width, height) {
                     // once the last tile has fallen
                     if (num === newtiles.length - 1) {
                         // check for new tile matches
-                        self.wait(self.elm, 125, function () {
+                        self.wait(self.elm, 300, function () {
                             self.checkAllMatches();
                             self.destroyMatchingTiles();
                         });

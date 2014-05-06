@@ -4,7 +4,7 @@ body {
     margin: 0 0;
     padding: 0 0;
     background-color: #eee;
-    color: #000;
+    color: #222;
     font-family: Verdana, sans-serif;
 }
 
@@ -27,7 +27,7 @@ div {
     position: absolute;
     width: 320px;
     height: 372px;
-    background-color: #000;
+    background-color: #222;
 }
 
 .header {
@@ -35,7 +35,7 @@ div {
     left: 0; top: 0;
     width: 320px;
     height: 30px;
-    background-color: #333;
+    background-color: #000;
 }
 
 .battle {
@@ -59,7 +59,7 @@ div {
     left: 0; top: 0;
     width: 320px;
     height: 232px;
-    background-color: #333;
+    background-color: #000;
 }
 
 .tileboard {
@@ -70,6 +70,7 @@ div {
 
 .tile {
     position: absolute;
+    overflow: hidden;
 }
 
 .info {
