@@ -27,6 +27,9 @@ var Tileboard = function (container, width, height) {
         var category = kanjidic.filterByCategory(4, 'jlpt', 'freq');
         self.initChapter(category, 2);
 
+        // initialize tiles with chapter data
+        this.initTiles();
+
         // display tileboard
         tweener.tween(this.elm,
             { 'webkitTransform': 'translate(0, 0)' }, { time: 500, delay: 0, easing: window.easing },
@@ -67,14 +70,21 @@ var Tileboard = function (container, width, height) {
             str +=' ' + category[i].literal;
 		}
         console.log('chapter' + chapterNum + ':' + str);
+	};
 
-		// initialize current chapter tiles
-		for (var y = 0; y < this.height; y++) {
-			for (var x = 0; x < this.width; x++) {
+
+    // initialize tiles
+
+    this.initTiles = function () {
+        var num, max = this.chapter.colors.length;
+
+        // initialize current chapter tiles
+        for (var y = 0; y < this.height; y++) {
+            for (var x = 0; x < this.width; x++) {
                 var tile = this.getTile(x, y);
                 // make sure that new tiles never match when initialized
                 tile.matches = { x: 3, y: 3, all: 3 };
-                var num;
+
                 if (window.matchingMode === 'line') {
                     while (tile.matches.x >= 3) {
                         num = utils.randomInt(0, max - 1);
@@ -94,9 +104,9 @@ var Tileboard = function (container, width, height) {
                     }
                 }
 
-			}
-		}
-	};
+            }
+        }
+    };
 
 
     this.gridToPixel = function (x, y) {
@@ -186,6 +196,7 @@ var Tileboard = function (container, width, height) {
             self.checkMatches('all');
         }
     };
+
 
     this.checkMatches = function (dir) { // x, y, all
 
