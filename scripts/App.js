@@ -59,14 +59,18 @@ var App = function (container) {
             var str = category[i].literal;
         }*/
 
+	    var kanjis = '赤　男　女　金　雨　甘　愛　対　気　点　空';
+	    var arr = kanjis.split('　');
+	    var sprites = [];
 
-        var arr = ('赤　男　女　金　雨　甘　愛　対　気　点　空').split(' ');
-        var sprites = [];
+	    function createKanji(num) {
+		    var str = arr[utils.randomInt(0, arr.length - 1)]; //utils.randomArr(arr),
+			console.log(arr.length, str);
+		    sprites.push(self.createKanjiMesh(str, { size: 400 }));
+	    }
+
         for (var i = 0; i < 20; i++) {
-            sprites.push(this.createKanjiMesh(
-                utils.randomArr(arr),
-                { size: 400 })
-            );
+            createKanji(i);
         }
 
 
@@ -95,6 +99,7 @@ var App = function (container) {
             side: THREE.DoubleSide,
             color: Math.floor(Math.random() * 16777215),
             transparent: true,
+	        depthTest: true
             //blending: THREE.AdditiveBlending, depthTest: false
         });
 
