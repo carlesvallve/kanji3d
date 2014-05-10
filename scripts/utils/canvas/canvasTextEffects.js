@@ -237,7 +237,7 @@ function parseShadow(shadows) {
     return ret;
 }
 
-function setShadowStyle(ctx, shadowStyle, text, font, offset) {
+function setShadowStyle(ctx, shadowStyle, text, font, color, offset) {
     ctx.save();
     ctx.font = font;
 
@@ -279,7 +279,7 @@ function setShadowStyle(ctx, shadowStyle, text, font, offset) {
     }
     // drawing the text in the foreground
     if (style.color) {
-        ctx.fillStyle = style.color;
+        ctx.fillStyle = color, //style.color;
         ctx.fillText(text, offsetX, offsetY + metrics.top);
     }
     // jump to next em-line

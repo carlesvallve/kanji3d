@@ -1,29 +1,71 @@
-var Kanji = function (scene) {
+var Kanji = function () {
     var self = this;
 
 
-    this.init = function (data) {
+    // ***************************************************************************************
+    // Init
+    // ***************************************************************************************
+
+    this.init = function (num, data) {
+        // props
+        this.num = num;
         this.data = data;
+        this.speed = 0.075; //0.05 + Math.random() * 0.05; // + Math.random() * 0.2;
+        this.color = Math.floor(Math.random() * 16777215);
 
-        var texture = this.generateGlowingTexture(data.literal); //new THREE.Texture( generateSprite() ); //THREE.ImageUtils.loadTexture( 'assets/textures/particles/star.png' );
-
+        // material
         var material = new THREE.SpriteMaterial( {
-            map: texture,
-            color: Math.floor(Math.random() * 16777215),
+            map: this.generateKanjiTexture(data.literal),
+            color: this.color,
             fog: true,
             transparent: true,
             blending: THREE.AdditiveBlending,
-            depthTest: false
+            depthTest: true
         } );
 
+        // sprite
         this.sprite = new THREE.Sprite( material );
-        scene.add( this.sprite );
+        this.sprite.scale.multiplyScalar(10);
+        this.sprite.fog = true;
+
+        // locate
+        var d = 0.0;
+        this.sprite.position.x = -d + (Math.random() * d * 2); //utils.randomInt(-d, d);
+        this.sprite.position.y = -d + (Math.random() * d * 2);
+        this.sprite.position.z = num * 18;//(10 + Math.random() * 20);
+    };
+
+
+    // ***************************************************************************************
+    // Update
+    // ***************************************************************************************
+
+    this.update = function () {
+        // move
+        this.sprite.position.z -= this.speed;
+
+        // alpha
+        if (this.sprite.visible && this.sprite.position.z < 10) {
+            this.sprite.material.opacity = this.sprite.position.z / 10;
+            if (this.sprite.opacity < 0) { this.sprite.visible = false; }
+        }
+    };
+
+
+    // ***************************************************************************************
+    // Kanji Texture Generators
+    // ***************************************************************************************
+
+    this.generateKanjiTexture = function (text, options) {
+        options = { size: 400, color: utils.randomArr(['#000000', '#ffffff']) };
+        //return this.generateNormalTexture(text, options);
+        return this.generateGlowingTexture(text, options);
     };
 
 
     this.generateNormalTexture = function (text, options) {
         options = options || {};
-        options.color = options.color || Math.floor(Math.random() * 16777215);
+        options.color = options.color || '#' + Math.floor(Math.random() * 16777215).toString(16);
         options.size = options.size || 350;
 
         var dynamicTexture  = new THREEx.DynamicTexture(512,512);
@@ -43,7 +85,7 @@ var Kanji = function (scene) {
         ctx.lineWidth = 1;
         ctx.strokeText(text, 256, 256);
 
-        ctx.fillStyle = Math.floor(Math.random() * 16777215); //options.color;
+        ctx.fillStyle = options.color;
         ctx.fillText(text, 256, 256);
 
         return dynamicTexture.texture;
@@ -52,7 +94,7 @@ var Kanji = function (scene) {
 
     this.generateGlowingTexture = function(text, options) {
         options = options || {};
-        options.color = options.color || Math.floor(Math.random() * 16777215);
+        options.color = options.color || '#' + Math.floor(Math.random() * 16777215).toString(16);
         options.size = options.size || 350;
 
         var dynamicTexture  = new THREEx.DynamicTexture(512,512);
@@ -65,6 +107,7 @@ var Kanji = function (scene) {
             'Neon',
             text,
             'bold ' + options.size + 'px Verdana',
+            options.color,
             { x: 256, y: 256 }
         );
 
