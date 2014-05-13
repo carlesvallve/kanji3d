@@ -73,10 +73,8 @@ var App = function (container) {
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 
-
-
         // CONTROLS
-        /*controls = new THREE.OrbitControls(camera);
+        controls = new THREE.OrbitControls(camera);
         controls.btnRotate = 0;
         controls.btnZoom = -1;
         controls.btnPan = 2;
@@ -86,7 +84,9 @@ var App = function (container) {
         controls.minDistance = 0.5;
         controls.maxDistance = 200;
         controls.minPolarAngle = 0;
-        controls.maxPolarAngle = Math.PI;*/
+        controls.maxPolarAngle = Math.PI;
+
+        console.log('Controls:', controls);
 
 
         // LIGHTING
@@ -155,11 +155,8 @@ var App = function (container) {
         // keep looping
         window.requestAnimationFrame(self.render);
 
-        // update
-        //camera.position.z += 0.1;
-
         if (self.particleGroup) {
-            //self.particleGroup.emitters[0].position.z = camera.position.z;
+            self.particleGroup.emitters[0].position = camera.position;
             self.particleGroup.tick(0.016);  //0.016 -> Using a fixed time-step here to avoid pauses
         }
 
