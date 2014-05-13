@@ -1,0 +1,31 @@
+html {
+
+}
+
+body {
+    overflow:hidden;
+    margin: 0 0;
+    padding: 0 0;
+    background-color: #eee;
+    color: #f22;
+    font-family: Verdana, sans-serif;
+}
+
+div {
+    -webkit-user-select: none;
+}
+
+.preloader {
+    position: absolute;
+    top: 180px;
+    width: 320px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10px;
+    color: #fff;
+}
+
+
+
+
+
