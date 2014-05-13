@@ -15,7 +15,7 @@ var Kanji = function () {
 
         // material
         var material = new THREE.SpriteMaterial( {
-            map: this.generateKanjiTexture(data.literal, {}, this.drawNormalTexture), //this.drawGlowingTexture),
+            map: this.generateKanjiTexture('Hi', {}, this.drawGlowingTexture), // this.drawNormalTexture), //
             color: this.color,
             fog: true,
             transparent: true,
@@ -66,7 +66,7 @@ var Kanji = function () {
     // ***************************************************************************************
 
     this.generateKanjiTexture = function (text, options, drawingFunction) {
-        options = { width: 512, height: 512, fontSize: 400, color: utils.randomArr(['#000000']) };
+        options = { width: 600, height: 600, fontSize: 400, color: utils.randomArr(['#ffffff']) };
 
         var canvas	= document.createElement( 'canvas' );
         canvas.width	= options.width;
@@ -84,11 +84,9 @@ var Kanji = function () {
     this.drawGlowingTexture = function(ctx, text, options) {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-        setShadowStyle (ctx,
-            'Neon',
-            text,
-            'bold ' + options.fontSize + 'px Verdana',
-            options.color,
+
+        canvasutils.setShadowStyle (ctx, 'Neon', text,
+            { weight: 'bold', size: options.fontSize, family: 'Verdana-Bold', color: options.color },
             { x: options.width / 2, y: options.height / 2 }
         );
     };

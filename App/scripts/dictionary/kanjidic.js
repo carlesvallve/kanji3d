@@ -17,21 +17,16 @@ var Kanjidic = function () {
         }
 
         var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-        xobj.open('GET', filename, true); // +  '?' + new Date().getTime(), true);
-        //xobj.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=ISO-8859-1');
-        //xobj.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;text/plain;charset=UTF-8");
-        //xobj.setRequestHeader("Accept-Charset", "ISO-8859-1");
-        //xobj.setRequestHeader("Accept-Charset", "UTF-8");
+        xobj.overrideMimeType("application/json; charset=UTF-8");
+        xobj.open('GET', filename +  '?' + new Date().getTime(), true);
 
         xobj.onreadystatechange = function () {
             if (xobj.readyState === 4 && xobj.status === 200) {
-                //domutils.setText(preloader, 'loading dictionary 100%');
-                //utils.setText('loading dictionary 100%');
-                window.setTimeout(function () {
-                    // .open will NOT return a value but simply returns undefined in async mode so use a callback
+                // .open will NOT return a value but simply returns undefined in async mode so use a callback
 
-                    self.data = JSON.parse(xobj.responseText); // decodeURIComponent
+                window.setTimeout(function () {
+                    // parse json text
+                    self.data = JSON.parse(xobj.responseText);
 
                     // return callback once the file has been loaded and parsed
                     if (cbComplete) { cbComplete(); }
@@ -43,9 +38,6 @@ var Kanjidic = function () {
         xobj.onprogress = function (e) {
             var percent = Math.round(e.loaded * 100 / e.total);
             if (cbProgress) { cbProgress(percent); }
-            //utils.setText('loading dictionary ' + percent + '%');
-            //domutils.setText(preloader, 'loading dictionary ' + percent + '%');
-            //console.log('loading dictionary ' + percent + '%');
         };
 
         xobj.send(null);

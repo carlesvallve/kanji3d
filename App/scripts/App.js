@@ -86,9 +86,6 @@ var App = function (container) {
         controls.minPolarAngle = 0;
         controls.maxPolarAngle = Math.PI;
 
-        console.log('Controls:', controls);
-
-
         // LIGHTING
         //lighting = new THREEx.ThreePointsLighting();
         //lighting = new THREEx.SunSetLighting();
