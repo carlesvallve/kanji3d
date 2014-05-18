@@ -21,12 +21,10 @@ var Kanji = function () {
         //var drawingFunction = this.drawShadowGlowingTexture;
         //var drawingFunction = this.drawNormalTexture;
 
-        console.log('=======================================');
-        console.log('create Kanji', num, this.data.literal);
-        console.log('=======================================');
+        console.log('====================================');
+        console.log('Kanji', num, this.data.literal);
 
         // texture
-        //var texture = this.generatePixasticKanjiTexture(str);
         var texture = this.generateKanjiTexture(
             this.data.literal,
             {},
@@ -35,7 +33,7 @@ var Kanji = function () {
 
         // material
         var material = new THREE.SpriteMaterial( {
-            map: texture, // this.drawNormalTexture), //
+            map: texture,
             color: this.color,
             //fog: true,
             transparent: true,
@@ -51,9 +49,9 @@ var Kanji = function () {
 
         // locate
         var d = 0.0;
-        this.sprite.position.x = -d + (Math.random() * d * 2); //utils.randomInt(-d, d);
+        this.sprite.position.x = -d + (Math.random() * d * 2);
         this.sprite.position.y = -d + (Math.random() * d * 2);
-        this.sprite.position.z = camera.position.z / 2 + (num + 1) * kanjiDistance;//(10 + Math.random() * 20);
+        this.sprite.position.z = camera.position.z / 2 + (num + 1) * kanjiDistance;
     };
 
 
@@ -106,14 +104,12 @@ var Kanji = function () {
 
 
     this.drawPixasticGlowingTexture = function(ctx, text, options) {
-        //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
         ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = 'normal ' + options.fontSize + 'px Verdana-Bold'; //Verdana-Bold';
+        ctx.font = 'normal ' + options.fontSize + 'px Verdana-Bold';
 
         ctx.fillStyle = '#ff00de'; //'#ff00de'; //'#ffffff';
         ctx.fillText(text, options.width / 2, options.height / 2);
@@ -130,8 +126,6 @@ var Kanji = function () {
 
 
     this.drawShadowGlowingTexture = function(ctx, text, options) {
-        //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
         canvasutils.setShadowStyle (ctx, 'Neon', text,
             { weight: 'bold', size: options.fontSize, family: 'Verdana-Bold', color: options.color },
             { x: options.width / 2, y: options.height / 2 }
@@ -140,8 +134,6 @@ var Kanji = function () {
 
 
     this.drawNormalTexture = function (ctx, text, options) {
-        //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.font = 'normal ' + options.fontSize + 'px Verdana-Bold';

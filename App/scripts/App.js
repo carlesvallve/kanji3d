@@ -16,8 +16,6 @@ var App = function (container) {
     // ***************************************************************************************
 
     this.init = function () {
-        console.log('Welcome to kanji-3d');
-
         // create scene
         this.createScene();
 
