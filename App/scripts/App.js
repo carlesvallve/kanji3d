@@ -5,7 +5,7 @@ var hud;
 var debugStats = false;
 
 var kanjiDistance = 38;
-var kanjiSpeed = 0.2;
+var kanjiSpeed = 0.5;
 
 var App = function (container) {
     var self = this;
@@ -43,7 +43,7 @@ var App = function (container) {
 
     this.createScene = function () {
         // RENDERER
-        renderer = new THREE.WebGLRenderer( {canvas: document.getElementById('canvas')} );
+        renderer = new THREE.WebGLRenderer( { antialias: false, canvas: document.getElementById('canvas')} );
         //renderer = new THREE.WebGLRenderer(); // { antialias	: false }
         renderer.setSize( window.innerWidth, window.innerHeight ); // container.clientWidth, container.clientHeight ); /
         renderer.setClearColor(0x222222, 1);
@@ -93,7 +93,7 @@ var App = function (container) {
 
 
         // Resize
-        window.onresize = this.resize;
+        //window.onresize = this.resize;
     };
 
 
@@ -103,9 +103,10 @@ var App = function (container) {
 
     this.createKanjis = function () {
         this.kanjis = [];
-        for (var i = 0; i < this.category.length; i++) {
+        for (var i = 0; i < 10; i++) { // this.category.length
             var kanji = new Kanji();
-            kanji.init(i, this.category[i]);
+            //kanji.init(i, this.category[i]);
+            kanji.init(i, null);
             scene.add(kanji.sprite);
             this.kanjis.push(kanji);
         }
@@ -125,8 +126,8 @@ var App = function (container) {
 
         var emitter = new SPE.Emitter({
             positionSpread: new THREE.Vector3(30, 30, 60),
-            acceleration: new THREE.Vector3(0, 0, -3),
-            velocity: new THREE.Vector3(0, 0, -3),
+            acceleration: new THREE.Vector3(0, 0, -8),
+            velocity: new THREE.Vector3(0, 0, -8),
 
             colorStart: new THREE.Color('white'),
             colorEnd: new THREE.Color('white'),
