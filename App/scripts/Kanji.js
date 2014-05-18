@@ -52,6 +52,7 @@ var Kanji = function () {
         // sprite
         this.sprite = new THREE.Sprite( material );
         this.sprite.scale.multiplyScalar(3);
+        this.sprite.material.opacity = 0;
         //this.sprite.fog = true;
 
         // locate
@@ -73,17 +74,19 @@ var Kanji = function () {
         // alpha
         var d = this.sprite.position.distanceTo(camera.position);
 
-        if ((kanjiDistance + 6 - d) < 10) {
-            this.sprite.material.opacity = (kanjiDistance + 6 - d) / 10;
+        // far
+        if (d > 11 && d < kanjiDistance + 5) {
+            if (this.sprite.material.opacity < 1) {
+                this.sprite.material.opacity += 0.025;
+            }
         }
 
-        if (this.sprite.visible && d < 8) {
-            this.sprite.material.opacity = d / 8;
+        // near
+        if (d < 11) {
+            if (this.sprite.material.opacity > 0) {
+                this.sprite.material.opacity -= 0.025;
+            }
         }
-
-        /*if (this.sprite.visible && d < 8) {
-            this.sprite.material.opacity -= this.speed / 8; //d / 8; //0.015; //d / 8;
-        }*/
     };
 
 
@@ -119,19 +122,18 @@ var Kanji = function () {
         ctx.textBaseline = 'middle';
         ctx.font = 'normal ' + options.fontSize + 'px Verdana-Bold'; //Verdana-Bold';
 
-        ctx.fillStyle = '#ff00de'; //'#ffffff'; //options.color;
+        ctx.fillStyle = '#ffffff'; //'#ff00de'; //'#ffffff'; //options.color;
         ctx.fillText(text, options.width / 2, options.height / 2); // text
 
         Pixastic.process(ctx.canvas, 'glow', { amount: 1.0, radius: 0.75 }, function (pixCanvas) {
             pixCanvas.tagName = 'canvas';
-            //Pixastic.process(pixCanvas, 'glow', { amount: 1.0, radius: 5.0 }, function (pixCanvas2) {
-                //pixCanvas2.tagName = 'canvas';
+
                 ctx.drawImage(pixCanvas, 0, 0);
 
-                //ctx.globalAlpha = 0.5;
-                ctx.fillStyle = options.color; //'#' + Math.floor(Math.random() * 16777215).toString(16); //'#ffffff'; //options.color;
-                ctx.fillText(text, options.width / 2, options.height / 2); // text
-            //});
+                ctx.globalAlpha = 0.25;
+                ctx.fillStyle = options.color; //'#' + Math.floor(Math.random() * 16777215).toString(16);
+                ctx.fillText(text, options.width / 2, options.height / 2);
+
         });
     };
 

@@ -4,7 +4,7 @@ var hud;
 
 var debugStats = false;
 
-var kanjiDistance = 28;
+var kanjiDistance = 50;
 var kanjiSpeed = 0.25;
 
 var App = function (container) {
@@ -33,10 +33,7 @@ var App = function (container) {
             // create kanjis // TODO: select N items from the whole chapter
             self.category = kanjidic.filterByCategory(4, 'jlpt', 'freq'); // random (?)
             self.createKanjis();
-        }, 1000);
-
-
-
+        }, 1500);
 
         // start rendering
         window.requestAnimationFrame(self.render);
@@ -74,7 +71,7 @@ var App = function (container) {
 
         // SCENE
         scene = new THREE.Scene(); // scene.fog = new THREE.FogExp2( 0x222222, 10 );
-        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 50 );
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.5, 100 );
         camera.position.z = -25;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
@@ -132,8 +129,8 @@ var App = function (container) {
 
         var emitter = new SPE.Emitter({
             positionSpread: new THREE.Vector3(10, 15, 100),
-            acceleration: new THREE.Vector3(0, 0, -8),
-            velocity: new THREE.Vector3(0, 0, -8),
+            acceleration: new THREE.Vector3(0, 0, -5),
+            velocity: new THREE.Vector3(0, 0, -5),
 
             colorStart: new THREE.Color('white'),
             colorEnd: new THREE.Color('white'),

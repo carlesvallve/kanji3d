@@ -1,4 +1,3 @@
-//console.log('Welcome to kanji-3D');
 var ejecta = window.ejecta;
 
 if (ejecta) {
@@ -12,7 +11,6 @@ if (ejecta) {
     ejecta.include('scripts/utils/utils.js');
     ejecta.include('scripts/utils/canvasutils.js');
 
-    //ejecta.include('scripts/dictionary/kanjidic-data.js');
     ejecta.include('scripts/dictionary/kanjidic.js');
 
     ejecta.include('scripts/Kanji.js');
@@ -23,53 +21,26 @@ if (ejecta) {
 
 var kanjidic, app;
 
+// retina resolution: set canvas at double resolution and scale it manually with style
 var canvas = document.getElementById('canvas');
-var w = window.innerWidth;
-var h = window.innerHeight;
-canvas.width = w;
-canvas.height = h;
+canvas.width = window.innerWidth * window.devicePixelRatio;
+canvas.height = window.innerHeight * window.devicePixelRatio;
+canvas.style.width = window.innerWidth + 'px';
+canvas.style.height = window.innerHeight + 'px';
 
 
 function init() {
     kanjidic = new Kanjidic();
-    //kanjidic.data = kanjidicData;
-    //console.log(kanjidic);
-    //console.log(kanjidicData.length);
-
-    //app = new App(document.body);
-    //app.init();
 
     kanjidic.load('./assets/data/kanjidic2-2.json',
-        function (percent) {
-            /*ctx.clearRect(0, 0, w, h);
-             ctx.textAlign = 'center';
-             ctx.textBaseline = 'middle';
-             ctx.font = 'bold 14px Verdana';
-             ctx.fillStyle = '#ffffff';
-             ctx.fillText('loading dictionary ' + percent + '%', w2, h2);*/
-        },
-        function () {
-            /*ctx.clearRect(0, 0, w, h);
-             ctx.textAlign = 'center';
-             ctx.textBaseline = 'middle';
-             ctx.font = 'bold 14px Verdana';
-             ctx.fillStyle = '#ffffff';
-             ctx.fillText('YAY!', w2, h2);*/
 
-            console.log(kanjidic.data.length);
-
-            app = new App(document.body);
-            app.init();
-
-
-            //tweener.tween(preloader, { opacity: 0 }, { time: 500, delay: 0, easing: 'ease' }, function () {
-            // hide preloader
-            //preloader.style.display = 'none';
+        function (percent) {},  // update
+        function () {           // end
+            console.log('dictionary loaded:', kanjidic.data.length, 'entries');
 
             // initialize application
-            //app = new App(container);
-            //app.init();
-            //});
+            app = new App(document.body);
+            app.init();
         }
     );
 }
