@@ -1,8 +1,6 @@
 var Kanji = function () {
     var self = this;
 
-    var usePixastic = false;
-
 
     // ***************************************************************************************
     // Init
@@ -15,16 +13,26 @@ var Kanji = function () {
         this.speed = kanjiSpeed; //0.05 + Math.random() * 0.05; // + Math.random() * 0.2;
         this.color = Math.floor(Math.random() * 16777215);
 
+        //var drawingFunction = this.drawPixasticGlowingTexture;
+        //var drawingFunction = this.drawShadowGlowingTexture;
+        var drawingFunction = this.drawNormalTexture;
+
+
+
         // caption
-        var str = ('A B C D E F G H I J K L M N O P Q R S T U V W X Y Z').split(' ')[this.num];
-        //var str = this.data.literal;
+        //var str = ('A B C D E F G H I J K L M N O P Q R S T U V W X Y Z').split(' ')[this.num];
+        var str = this.data.literal;
+
+        console.log('=======================================');
+        console.log('create Kanji', str);
+        console.log('=======================================');
 
         // texture
         //var texture = this.generatePixasticKanjiTexture(str);
         var texture = this.generateKanjiTexture(
             str,
             {},
-            usePixastic ? this.drawPixasticGlowingTexture : this.drawShadowGlowingTexture
+            drawingFunction
         );
 
         // material
@@ -138,19 +146,10 @@ var Kanji = function () {
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = 'normal ' + options.fontSize + 'px Verdana-Bold'; //Verdana-Bold';
-
-        /*ctx.shadowOffsetX = 5;
-        ctx.shadowOffsetY = 5;
-        ctx.shadowBlur = 4;
-        ctx.shadowColor = '#cccccc';
-        ctx.lineWidth = 1;
-        ctx.strokeText(text, options.width / 2, options.height / 2);*/
+        ctx.font = 'normal ' + options.fontSize + 'px Verdana-Bold';
 
         ctx.fillStyle = '#999999'; //options.color;
-        ctx.fillText('V', options.width / 2, options.height / 2); // text
-
-        console.log('>>>', '赤', decodeURI(text));
+        ctx.fillText(text, options.width / 2, options.height / 2); // text
     };
 };
 

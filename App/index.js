@@ -1,6 +1,7 @@
 //console.log('Welcome to kanji-3D');
+var ejecta = window.ejecta;
 
-if (window.ejecta) {
+if (ejecta) {
     ejecta.include('lib/threejs/three.js');
     //ejecta.include('lib/threejs/stats.min.js');
 
@@ -10,6 +11,8 @@ if (window.ejecta) {
     ejecta.include('scripts/utils/pixastic.custom.js');
     ejecta.include('scripts/utils/utils.js');
     ejecta.include('scripts/utils/canvasutils.js');
+
+    ejecta.include('scripts/dictionary/kanjidic-data.js');
     ejecta.include('scripts/dictionary/kanjidic.js');
 
     ejecta.include('scripts/Kanji.js');
@@ -29,26 +32,29 @@ canvas.height = h;
 
 function init() {
     kanjidic = new Kanjidic();
+    kanjidic.data = kanjidicData;
     console.log(kanjidic);
+    //console.log(kanjidicData.length);
 
+    app = new App(document.body);
+    app.init();
 
-
-    kanjidic.load('./assets/data/kanjidic2-2.json',
+    /*kanjidic.load('./assets/data/kanjidic2-2.json',
         function (percent) {
-            /*ctx.clearRect(0, 0, w, h);
+            *//*ctx.clearRect(0, 0, w, h);
              ctx.textAlign = 'center';
              ctx.textBaseline = 'middle';
              ctx.font = 'bold 14px Verdana';
              ctx.fillStyle = '#ffffff';
-             ctx.fillText('loading dictionary ' + percent + '%', w2, h2);*/
+             ctx.fillText('loading dictionary ' + percent + '%', w2, h2);*//*
         },
         function () {
-            /*ctx.clearRect(0, 0, w, h);
+            *//*ctx.clearRect(0, 0, w, h);
              ctx.textAlign = 'center';
              ctx.textBaseline = 'middle';
              ctx.font = 'bold 14px Verdana';
              ctx.fillStyle = '#ffffff';
-             ctx.fillText('YAY!', w2, h2);*/
+             ctx.fillText('YAY!', w2, h2);*//*
 
             console.log(kanjidic.data.length);
 
@@ -65,7 +71,7 @@ function init() {
             //app.init();
             //});
         }
-    );
+    );*/
 }
 
 init();

@@ -103,7 +103,7 @@ var App = function (container) {
 
     this.createKanjis = function () {
         this.kanjis = [];
-        for (var i = 0; i < 10; i++) { // this.category.length
+        for (var i = 0; i < this.category.length; i++) {
             var kanji = new Kanji();
             kanji.init(i, this.category[i]);
             scene.add(kanji.sprite);
