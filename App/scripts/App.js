@@ -4,8 +4,8 @@ var hud;
 
 var debugStats = false;
 
-var kanjiDistance = 38;
-var kanjiSpeed = 0.5;
+var kanjiDistance = 28;
+var kanjiSpeed = 0.25;
 
 var App = function (container) {
     var self = this;
@@ -25,12 +25,18 @@ var App = function (container) {
         //hud = new Hud();
         //hud.init();
 
-        // create kanjis // TODO: select N items from the whole chapter
-        this.category = kanjidic.filterByCategory(4, 'jlpt', 'freq'); // random (?)
-        this.createKanjis();
-
         // create particles
         this.createParticles();
+
+        this.kanjis = [];
+        window.setTimeout(function () {
+            // create kanjis // TODO: select N items from the whole chapter
+            self.category = kanjidic.filterByCategory(4, 'jlpt', 'freq'); // random (?)
+            self.createKanjis();
+        }, 1000);
+
+
+
 
         // start rendering
         window.requestAnimationFrame(self.render);
@@ -68,7 +74,7 @@ var App = function (container) {
 
         // SCENE
         scene = new THREE.Scene(); // scene.fog = new THREE.FogExp2( 0x222222, 10 );
-        camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 50 );
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 50 );
         camera.position.z = -25;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
@@ -103,10 +109,10 @@ var App = function (container) {
 
     this.createKanjis = function () {
         this.kanjis = [];
-        for (var i = 0; i < 10; i++) { // this.category.length
+        for (var i = 0; i < 20; i++) { // this.category.length
             var kanji = new Kanji();
-            //kanji.init(i, this.category[i]);
-            kanji.init(i, null);
+            kanji.init(i, this.category[i]);
+            //kanji.init(i, null);
             scene.add(kanji.sprite);
             this.kanjis.push(kanji);
         }
@@ -125,19 +131,19 @@ var App = function (container) {
         });
 
         var emitter = new SPE.Emitter({
-            positionSpread: new THREE.Vector3(30, 30, 60),
+            positionSpread: new THREE.Vector3(10, 15, 100),
             acceleration: new THREE.Vector3(0, 0, -8),
             velocity: new THREE.Vector3(0, 0, -8),
 
             colorStart: new THREE.Color('white'),
             colorEnd: new THREE.Color('white'),
-            sizeStart: 0.5,
-            sizeEnd: 0.5,
+            sizeStart: 1,
+            sizeEnd: 1,
             opacityStart: 0,
             opacityMiddle: 1,
             opacityEnd: 0,
 
-            particleCount: 3000
+            particleCount: 500
         });
 
         this.particleGroup.addEmitter( emitter );

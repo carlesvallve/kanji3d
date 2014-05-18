@@ -916,7 +916,7 @@
 				PLIST_FILE_OUTPUT_FORMAT = binary;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
-				STRINGS_FILE_OUTPUT_ENCODING = binary;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
@@ -942,7 +942,7 @@
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
-				STRINGS_FILE_OUTPUT_ENCODING = binary;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
