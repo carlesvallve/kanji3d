@@ -7,7 +7,7 @@ if (window.ejecta) {
     ejecta.include('lib/shaders/ShaderParticles.min.js');
     ejecta.include('lib/controls/customOrbitControls.js');
 
-
+    ejecta.include('scripts/utils/pixastic.custom.js');
     ejecta.include('scripts/utils/utils.js');
     ejecta.include('scripts/utils/canvasutils.js');
     ejecta.include('scripts/dictionary/kanjidic.js');

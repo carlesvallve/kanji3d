@@ -92,7 +92,7 @@ var CanvasUtils = function () {
 
         // set font
         ctx.font = font.weight + ' ' + font.size + 'px Verdana-Bold'; //Verdana-Bold';
-        console.log('text shadow font:', ctx.font); //'normal ' + font.size + 'px Verdana-Bold');
+        //console.log('text shadow font:', ctx.font); //'normal ' + font.size + 'px Verdana-Bold');
         //ctx.font = font.weight + ' ' + font.size + 'px ' + font.family;
 
         // gather information about the text metrics
@@ -102,6 +102,8 @@ var CanvasUtils = function () {
             width: ctx.measureText(text).width,
             height: font.size * 1.25
         };
+
+        console.log('metrics:' + metrics + ' ' + metrics.em + ' ' + metrics.top + ' ' + metrics.width + ' ' + metrics.height);
 
         // absolute position of the text (within a translation state)
         var offsetX = offset.x - metrics.width / 2;
