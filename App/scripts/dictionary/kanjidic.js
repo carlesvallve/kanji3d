@@ -24,6 +24,8 @@ var Kanjidic = function () {
             if (xobj.readyState === 4 && xobj.status === 200) {
                 // .open will NOT return a value but simply returns undefined in async mode so use a callback
 
+                if (cbProgress) { cbProgress(100); }
+
                 window.setTimeout(function () {
                     // parse json text
                     self.data = JSON.parse(xobj.responseText);

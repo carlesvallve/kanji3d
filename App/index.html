@@ -2,45 +2,47 @@
 <html>
 <head>
     <title>Kanji3d</title>
+
     <meta charset="utf-8">
-    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="stylesheet" type="text/css" href="styles.css" />
 </head>
+
 <body>
-    <!--<script src="../three.js/build/three.js"></script>
-    <script src="../three.js/examples/js/Detector.js"></script>
-    <script src="../three.js/examples/js/libs/stats.min.js"></script>
+    <!--<canvas id='canvas'></canvas>-->
 
-    <script src="lib/dat-gui.js"></script>
-    <script src="lib/tween.min.js"></script>
-    <script src="lib/controls/customOrbitControls.js"></script>
-    <script src="lib/shaders/ShaderParticles.min.js"></script>
+    <div id="container"></div>
+    <!--<div id="info"><a href="http://threejs.org" target="_blank">three.js css3d</a> - periodic table. <a href="https://plus.google.com/113862800338869870683/posts/QcFk5HrWran" target="_blank">info</a>.</div>-->
+    <div id="menu">
+        <button id="row">ROW</button>
+        <button id="table">TABLE</button>
+        <button id="sphere">SPHERE</button>
+        <button id="helix">HELIX</button>
+        <button id="grid">GRID</button>
+    </div>
 
-    <script src='lib/threex/threex.rendererstats.js'></script>
-    <script src="lib/threex/threex.basiclighting.js"></script>
-    <script src="lib/threex/threex.rendererstats.js"></script>
-    <script src='lib/threex/threex.dynamictexture.js'></script>
-
-
-    <script src='scripts/utils/canvas/canvasTextEffects.js'></script>
-    <script src="scripts/utils/tweener.js"></script>
-    <script src="scripts/utils/domutils.js"></script>
-    <script src="scripts/utils/utils.js"></script>
-
-    <script src="scripts/mouse/swipe.js"></script>
-    <script src="scripts/dictionary/kanjidic.js"></script>
-    <script src="scripts/Kanji.js"></script>
-    <script src="scripts/Hud.js"></script>
-    <script src="scripts/App.js"></script>
-    <script src="index.js"></script>-->
-
-    <canvas id='canvas'></canvas>
+    <div id="preloader">loading dictionary...</div>
 
     <script src='lib/threejs/three.js'></script>
     <script src='lib/threejs/stats.min.js'></script>
+    <script src="lib/tween.min.js"></script>
+
+    <script src="lib/renderers/CSS3DRenderer.js"></script>
+
+    <script src="lib/controls/TrackballControls.js"></script>
+    <!--<script src='lib/controls/customOrbitControls.js'></script>-->
+
+    <script src='scripts/dictionary/kanjidic.js'></script>
+    <script src='scripts/utils/utils.js'></script>
+    <script src='scripts/App.js'></script>
+    <script src='index.js'></script>
+
+
+    <!--<script src='lib/controls/customOrbitControls.js'></script>
 
     <script src='lib/shaders/ShaderParticles.min.js'></script>
-    <script src='lib/controls/customOrbitControls.js'></script>
 
     <script src='scripts/utils/pixastic.custom.js'></script>
     <script src='scripts/utils/canvasutils.js'></script>
@@ -50,7 +52,7 @@
 
     <script src='scripts/dictionary/kanjidic.js'></script>
     <script src='scripts/App.js'></script>
-    <script src='index.js'></script>
+    <script src='index.js'></script>-->
 
 </body>
 </html>
